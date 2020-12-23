@@ -1,9 +1,9 @@
-﻿using HelloMicroservices.EventFeed;
+﻿using System;
+using System.Threading.Tasks;
+using HelloMicroservices.EventFeed;
 using HelloMicroservices.ShoppingCart;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,60 +26,32 @@ namespace HelloMicroservices.Controllers
             _eventStore = eventStore;
         }
 
-        // GET: api/<ShoppingCartController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET api/<ShoppingCart>/5
+        [HttpGet("{userId}")]
+        public ActionResult<ShoppingCart.ShoppingCart> Get(int userId)
         {
-            return new string[] { "value1", "value2" };
+            var cart = _shoppingCartStore.Get(userId);
+            return cart;
         }
 
-        // GET api/<ShoppingCartController>/5
-        [HttpGet("{id}")]
-        public ActionResult<ShoppingCart.ShoppingCart> Get(int id)
+        // POST api/<ShoppingCart>/5
+        [HttpPost("{userId}")]
+        public async Task Post(int userId, [FromBody] int[] productCatalogIds)
         {
-            if (id == 42)
-            {
-                var cart = new ShoppingCart.ShoppingCart(id);
-                var item1 = new ShoppingCartItem(1, "Basic t-shirt", "a quiet t-shirt", new Money("eur", "40"));
-                var item2 = new ShoppingCartItem(2, "Fancy shirt", "a loud t-shirt", new Money("eur", "50"));
-                cart.AddItems(new[] { item1, item2 }, _eventStore);
-                return cart;
-            }
-            else
-            {
-                var cart = _shoppingCartStore.Get(id);
-                return cart;
-            }
-        }
+            if (productCatalogIds == null)
+                await Task.FromException(new NullReferenceException(nameof(productCatalogIds)));
 
-        // POST api/<ShoppingCartController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-            // var cart = _shoppingCartStore.Get(id);
-        }
-
-        // PUT api/<ShoppingCartController>/5
-        [HttpPut("{id}/items")]
-        public async Task Put(int id, [FromBody] string value)
-        {
-            var productCatalogIds = new int[0]; // this.Bind<int[]>();
-            // var userId = (int)parameters.userid;
-
-            var shoppingCart = _shoppingCartStore.Get(id);
+            var shoppingCart = _shoppingCartStore.Get(userId);
             var shoppingCartItems = await _productCatalog.GetShoppingCartItems(productCatalogIds).ConfigureAwait(false);
             shoppingCart.AddItems(shoppingCartItems, _eventStore);
             _shoppingCartStore.Save(shoppingCart);
         }
 
-        // DELETE api/<ShoppingCartController>/5
-        [HttpDelete("{id}/items")]
-        public void Delete(int id)
+        // DELETE api/<ShoppingCart>/5
+        [HttpDelete("{userId}")]
+        public void Delete(int userId, [FromBody] int[] productCatalogIds)
         {
-            var productCatalogIds = new int[0]; // this.Bind<int[]>();
-            // var userId = (int)parameters.userid;
-
-            var shoppingCart = _shoppingCartStore.Get(id);
+            var shoppingCart = _shoppingCartStore.Get(userId);
             shoppingCart.RemoveItems(productCatalogIds, _eventStore);
             _shoppingCartStore.Save(shoppingCart);
         }

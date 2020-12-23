@@ -73,10 +73,7 @@ namespace HelloMicroservices
             try
             {
                 // Create a new product
-                var shoppingCart = new ShoppingCart.ShoppingCart
-                (
-                    42, new ShoppingCartItem[] { new(1, "", "", new Money("", "")) }
-                );
+                var shoppingCart = new ShoppingCart.ShoppingCart(42);
 
                 var url = await CreateShoppingCartAsync(shoppingCart);
                 Console.WriteLine($"Created at {url}");

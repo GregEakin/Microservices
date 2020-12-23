@@ -24,14 +24,13 @@ namespace HelloMicroservices
         private const string productCatalogBaseUrl = @"http://private-05cc8-chapter2productcataloguemicroservice.apiary-mock.com";
         private const string getProductPathTemplate = "/products?productIds=[{0}]";
 
-        public Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>
+        public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>
             // exponentialRetryPolicy.ExecuteAsync(async () => await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false));
-            throw new NotImplementedException();
+            await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false);
 
         private async Task<IEnumerable<ShoppingCartItem>> GetItemsFromCatalogService(int[] productCatalogIds)
         {
-            var response = await
-              RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
+            var response = await RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
             return await ConvertToShoppingCartItems(response).ConfigureAwait(false);
         }
 
@@ -55,13 +54,5 @@ namespace HelloMicroservices
         }
 
         private record ProductCatalogProduct(string ProductId, string ProductName, string ProductDescription, Money Price);
-        // private class ProductCatalogProduct
-        // {
-        //     public string ProductId { get; set; }
-        //     public string ProductName { get; set; }
-        //     public string ProductDescription { get; set; }
-        //     public Money Price { get; set; }
-        // }
     }
-
 }
