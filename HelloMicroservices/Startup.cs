@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HelloMicroservices.EventFeed;
+using HelloMicroservices.ShoppingCart;
 
 namespace HelloMicroservices
 {
@@ -25,7 +27,10 @@ namespace HelloMicroservices
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSingleton<IShoppingCartStore, ShoppingCartStore>();
+            services.AddSingleton<IProductCatalogClient, ProductCatalogClient>();
+            services.AddSingleton<IEventStore, EventStore>();
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
