@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using HelloMicroservices.EventFeed;
-using HelloMicroservices.ShoppingCart;
+using HelloMicroservices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +28,7 @@ namespace HelloMicroservices.Controllers
 
         // GET api/<ShoppingCart>/5
         [HttpGet("{userId}")]
-        public ActionResult<ShoppingCart.ShoppingCart> Get(int userId)
+        public ActionResult<ShoppingCart> Get(int userId)
         {
             var cart = _shoppingCartStore.Get(userId);
             return cart;

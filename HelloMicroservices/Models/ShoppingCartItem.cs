@@ -4,7 +4,7 @@
 // FILE:  ShoppingCartItem.cs
 // AUTHOR:  Greg Eakin
 
-namespace HelloMicroservices.ShoppingCart
+namespace HelloMicroservices.Models
 {
     public record ShoppingCartItem(int ProductCatalogId, string ProductName, string Description, Money Price);
 }

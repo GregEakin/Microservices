@@ -6,7 +6,7 @@
 
 using System.Linq;
 using HelloMicroservices.EventFeed;
-using HelloMicroservices.ShoppingCart;
+using HelloMicroservices.Models;
 using Moq;
 using NUnit.Framework;
 

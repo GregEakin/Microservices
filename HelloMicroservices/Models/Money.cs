@@ -4,7 +4,7 @@
 // FILE:  Money.cs
 // AUTHOR:  Greg Eakin
 
-namespace HelloMicroservices.ShoppingCart
+namespace HelloMicroservices.Models
 {
     public record Money(string Currency, string Amount);
 }

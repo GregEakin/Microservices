@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using HelloMicroservices;
 using HelloMicroservices.Controllers;
 using HelloMicroservices.EventFeed;
-using HelloMicroservices.ShoppingCart;
+using HelloMicroservices.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

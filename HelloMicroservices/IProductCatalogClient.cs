@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HelloMicroservices.ShoppingCart;
+using HelloMicroservices.Models;
 
 namespace HelloMicroservices
 {

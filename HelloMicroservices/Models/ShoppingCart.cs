@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HelloMicroservices.ShoppingCart
+namespace HelloMicroservices.Models
 {
     public class ShoppingCart
     {

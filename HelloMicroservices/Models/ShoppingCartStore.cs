@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace HelloMicroservices.ShoppingCart
+namespace HelloMicroservices.Models
 {
     public class ShoppingCartStore : IShoppingCartStore
     {

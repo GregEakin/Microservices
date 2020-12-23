@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using HelloMicroservices.ShoppingCart;
+using HelloMicroservices.Models;
 
 namespace HelloMicroservices
 {
@@ -19,7 +19,7 @@ namespace HelloMicroservices
     {
         private readonly HttpClient _client = new();
 
-        public void ShowProduct(ShoppingCart.ShoppingCart cart)
+        public void ShowProduct(ShoppingCart cart)
         {
             Console.WriteLine($"UserId: {cart.UserId}");
             foreach (var item in cart.Items)
@@ -29,7 +29,7 @@ namespace HelloMicroservices
             }
         }
 
-        public async Task<Uri> CreateShoppingCartAsync(ShoppingCart.ShoppingCart shoppingCart)
+        public async Task<Uri> CreateShoppingCartAsync(ShoppingCart shoppingCart)
         {
             var response = await _client.PostAsJsonAsync("api/ShoppingCart", shoppingCart);
             response.EnsureSuccessStatusCode();
@@ -38,22 +38,22 @@ namespace HelloMicroservices
             return response.Headers.Location;
         }
 
-        public async Task<ShoppingCart.ShoppingCart> GetShoppingCartAsync(string path)
+        public async Task<ShoppingCart> GetShoppingCartAsync(string path)
         {
             var response = await _client.GetAsync(path);
             var shoppingCart = response.IsSuccessStatusCode
-                ? await response.Content.ReadFromJsonAsync<ShoppingCart.ShoppingCart>()
+                ? await response.Content.ReadFromJsonAsync<ShoppingCart>()
                 : null;
             return shoppingCart;
         }
 
-        public async Task<ShoppingCart.ShoppingCart> UpdateProductAsync(ShoppingCart.ShoppingCart shoppingCart)
+        public async Task<ShoppingCart> UpdateProductAsync(ShoppingCart shoppingCart)
         {
             var response = await _client.PutAsJsonAsync($"api/ShoppingCart/{shoppingCart.UserId}", shoppingCart);
             response.EnsureSuccessStatusCode();
 
             // Deserialize the updated product from the response body.
-            shoppingCart = await response.Content.ReadFromJsonAsync<ShoppingCart.ShoppingCart>();
+            shoppingCart = await response.Content.ReadFromJsonAsync<ShoppingCart>();
             return shoppingCart;
         }
 
@@ -73,7 +73,7 @@ namespace HelloMicroservices
             try
             {
                 // Create a new product
-                var shoppingCart = new ShoppingCart.ShoppingCart(42);
+                var shoppingCart = new ShoppingCart(42);
 
                 var url = await CreateShoppingCartAsync(shoppingCart);
                 Console.WriteLine($"Created at {url}");

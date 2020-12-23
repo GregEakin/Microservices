@@ -4,7 +4,7 @@
 // FILE:  IShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
-namespace HelloMicroservices.ShoppingCart
+namespace HelloMicroservices.Models
 {
     public interface IShoppingCartStore
     {
