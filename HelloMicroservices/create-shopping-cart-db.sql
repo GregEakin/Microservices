@@ -1,48 +1,45 @@
-﻿CREATE DATABASE ShoppingCart
-GO
+﻿create table "ShoppingCart"
+(
+	id integer not null
+		constraint shoppingcart_pk
+			primary key,
+	"UserId" bigint not null
+);
 
-USE [ShoppingCart]
-GO
+alter table "ShoppingCart" owner to cartapp;
 
-CREATE TABLE [dbo].[ShoppingCart](
-  [ID] int IDENTITY(1,1) PRIMARY KEY,
-  [UserId] [bigint] NOT NULL,
-  CONSTRAINT ShoppingCartUnique UNIQUE([ID], [UserID])
-)
-GO
+create index "ShoppingCart_UserId"
+	on "ShoppingCart" ("UserId");
 
-CREATE INDEX ShoppingCart_UserId 
-ON [dbo].[ShoppingCart] (UserId)
-GO
+create table "ShoppingCartItems"
+(
+	id integer not null
+		constraint shoppingcartitems_pk
+			primary key,
+	"ShoppingCartId" integer not null
+		constraint "FK_ShoppingCart"
+			references "ShoppingCart",
+	"ProductCatalogId" bigint not null,
+	"ProductName" varchar(100) not null,
+	"ProductDescription" varchar(500),
+	"Amount" integer not null,
+	"Currency" varchar(5) not null
+);
 
-CREATE TABLE [dbo].[ShoppingCartItems](
-  [ID] int IDENTITY(1,1) PRIMARY KEY,
-	[ShoppingCartId] [int] NOT NULL,
-	[ProductCatalogId] [bigint] NOT NULL,
-	[ProductName] [nvarchar](100) NOT NULL,
-	[ProductDescription] [nvarchar](500) NULL,
-	[Amount] [int] NOT NULL,
-	[Currency] [nvarchar](5) NOT NULL
-)
+alter table "ShoppingCartItems" owner to cartapp;
 
-GO
+create index "ShoppingCartItems_ShoppingCartId"
+	on "ShoppingCartItems" ("ShoppingCartId");
 
-ALTER TABLE [dbo].[ShoppingCartItems]  WITH CHECK ADD CONSTRAINT [FK_ShoppingCart] FOREIGN KEY([ShoppingCartId])
-REFERENCES [dbo].[ShoppingCart] ([Id])
-GO
+create table "EventStore"
+(
+	id integer not null
+		constraint eventstore_pk
+			primary key,
+	"Name" varchar(100) not null,
+	"OccurredAt" date not null,
+	"Content" varchar not null
+);
 
-ALTER TABLE [dbo].[ShoppingCartItems] CHECK CONSTRAINT [FK_ShoppingCart]
-GO
-
-CREATE INDEX ShoppingCartItems_ShoppingCartId 
-ON [dbo].[ShoppingCartItems] (ShoppingCartId)
-GO
-
-CREATE TABLE [dbo].[EventStore](
-  [ID] int IDENTITY(1,1) PRIMARY KEY,
-  [Name] [nvarchar](100)  NOT NULL,
-  [OccurredAt] [datetimeoffset] NOT NULL,
-  [Content][nvarchar](max) NOT NULL
-)
-GO
+alter table "EventStore" owner to cartapp;
 
