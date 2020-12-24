@@ -24,7 +24,7 @@ namespace HelloMicroservices
             foreach (var item in cart.Items)
             {
                 Console.WriteLine("    id: {0}, name: {1}, desc: {2}, {3} {4}", item.ProductCatalogId, item.ProductName,
-                    item.Description, item.Price.Currency, item.Price.Amount);
+                    item.ProductDescription, item.Price.Currency, item.Price.Amount);
             }
         }
 

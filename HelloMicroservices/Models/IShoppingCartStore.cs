@@ -4,11 +4,13 @@
 // FILE:  IShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
+using System.Threading.Tasks;
+
 namespace HelloMicroservices.Models
 {
     public interface IShoppingCartStore
     {
-        ShoppingCart Get(int userId);
-        void Save(ShoppingCart shoppingCart);
+        Task<ShoppingCart> Get(int userId);
+        Task Save(ShoppingCart shoppingCart);
     }
 }

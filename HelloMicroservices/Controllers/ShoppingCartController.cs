@@ -4,6 +4,7 @@ using HelloMicroservices.EventFeed;
 using HelloMicroservices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,33 +28,36 @@ namespace HelloMicroservices.Controllers
         }
 
         // GET api/<ShoppingCart>/5
-        [HttpGet("{userId}")]
-        public ActionResult<ShoppingCart> Get(int userId)
+        [HttpGet("{userId:int}")]
+        public async Task<ActionResult<ShoppingCart>> Get(int userId)
         {
-            var cart = _shoppingCartStore.Get(userId);
+            var cart = await _shoppingCartStore.Get(userId);
             return cart;
         }
 
         // POST api/<ShoppingCart>/5
-        [HttpPost("{userId}")]
-        public async Task Post(int userId, [FromBody] int[] productCatalogIds)
+        [HttpPost("{userId:int}/items")]
+        public async Task<ActionResult> Post(int userId, [FromBody] int[] productCatalogIds)
         {
             if (productCatalogIds == null)
-                await Task.FromException(new NullReferenceException(nameof(productCatalogIds)));
+                // await Task.FromException(new NullReferenceException(nameof(productCatalogIds)));
+                // throw new HttpResponseException(msg);
+                return BadRequest();
 
-            var shoppingCart = _shoppingCartStore.Get(userId);
+            var shoppingCart = await _shoppingCartStore.Get(userId);
             var shoppingCartItems = await _productCatalog.GetShoppingCartItems(productCatalogIds).ConfigureAwait(false);
             shoppingCart.AddItems(shoppingCartItems, _eventStore);
-            _shoppingCartStore.Save(shoppingCart);
+            await _shoppingCartStore.Save(shoppingCart);
+            return Ok();
         }
 
         // DELETE api/<ShoppingCart>/5
-        [HttpDelete("{userId}")]
-        public void Delete(int userId, [FromBody] int[] productCatalogIds)
+        [HttpDelete("{userId:int}/items")]
+        public async Task Delete(int userId, [FromBody] int[] productCatalogIds)
         {
-            var shoppingCart = _shoppingCartStore.Get(userId);
+            var shoppingCart = await _shoppingCartStore.Get(userId);
             shoppingCart.RemoveItems(productCatalogIds, _eventStore);
-            _shoppingCartStore.Save(shoppingCart);
+            await _shoppingCartStore.Save(shoppingCart);
         }
     }
 }

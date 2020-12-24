@@ -27,7 +27,7 @@ namespace HelloMicrosoervicesTests
         [Test]
         public void AddItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", "Amount"));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123));
             var items = new[] { item };
 
             // mockEventStore.Setup(t =>
@@ -46,7 +46,7 @@ namespace HelloMicrosoervicesTests
         [Test]
         public void RemoveItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", "Amount"));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123));
             var items = new[] { item };
             var cart = new ShoppingCart(234, items);
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>()));

@@ -4,25 +4,58 @@
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
-using System.Collections.Generic;
+using Npgsql;
+using System.Threading.Tasks;
+using Dapper;
 
 namespace HelloMicroservices.Models
 {
     public class ShoppingCartStore : IShoppingCartStore
     {
-        private static readonly Dictionary<int, ShoppingCart> Database = new();
+        private const string connectionString =
+            @"Host=192.168.40.140;Port=5432;Database=ShoppingCart;Username=cartapp;Password=cartpw";
 
-        public ShoppingCart Get(int userId)
+        private const string readItemsSql =
+            @"select ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
+from ""dbo"".""ShoppingCart"", ""dbo"".""ShoppingCartItems""
+where ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
+and ""ShoppingCart"".""UserId"" = @UserId";
+
+        public async Task<ShoppingCart> Get(int userId)
         {
-            if (!Database.ContainsKey(userId))
-                Database[userId] = new ShoppingCart(userId);
-
-            return Database[userId];
+            await using var conn = new NpgsqlConnection(connectionString);
+            var items = await conn.QueryAsync<ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
+                (shoppingCartItem, money) => { shoppingCartItem.Price = money; return shoppingCartItem; },
+                new { UserId = userId },
+                splitOn: "Currency");
+            return new ShoppingCart(userId, items);
         }
 
-        public void Save(ShoppingCart shoppingCart)
+        private const string deleteAllForShoppingCartSql =
+            @"delete item from ShoppingCartItems item
+inner join ShoppingCart cart on item.ShoppingCartId = cart.ID
+and cart.UserId=@UserId";
+
+        private const string addAllForShoppingCartSql =
+            @"insert into ShoppingCartItems 
+(ShoppingCartId, ProductCatalogId, ProductName, 
+ProductDescription, Amount, Currency)
+values 
+(@ShoppingCartId, @ProductCatalogId, @ProductName,v
+@ProductDescription, @Amount, @Currency)";
+
+        public async Task Save(ShoppingCart shoppingCart)
         {
-            // Nothing needed. Saving would be needed with a real DB
+            await using var conn = new NpgsqlConnection(connectionString);
+            await using var tx = conn.BeginTransaction();
+            await conn.ExecuteAsync(
+                deleteAllForShoppingCartSql,
+                new { UserId = shoppingCart.UserId },
+                tx).ConfigureAwait(false);
+            await conn.ExecuteAsync(
+                addAllForShoppingCartSql,
+                shoppingCart.Items,
+                tx).ConfigureAwait(false);
         }
     }
 }

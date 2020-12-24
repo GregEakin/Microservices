@@ -6,7 +6,7 @@
 	"UserId" bigint not null
 );
 
-alter table "ShoppingCart" owner to cartapp;
+/* alter table "ShoppingCart" owner to cartapp; */
 
 create index "ShoppingCart_UserId"
 	on "ShoppingCart" ("UserId");
@@ -26,7 +26,7 @@ create table "ShoppingCartItems"
 	"Currency" varchar(5) not null
 );
 
-alter table "ShoppingCartItems" owner to cartapp;
+/* alter table "ShoppingCartItems" owner to cartapp; */
 
 create index "ShoppingCartItems_ShoppingCartId"
 	on "ShoppingCartItems" ("ShoppingCartId");
@@ -41,5 +41,4 @@ create table "EventStore"
 	"Content" varchar not null
 );
 
-alter table "EventStore" owner to cartapp;
-
+/* alter table "EventStore" owner to cartapp; */

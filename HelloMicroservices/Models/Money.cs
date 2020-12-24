@@ -6,5 +6,15 @@
 
 namespace HelloMicroservices.Models
 {
-    public record Money(string Currency, string Amount);
+    public class Money
+    {
+        public string Currency { get; set; }
+        public int Amount { get; set; }
+        public Money() { }
+        public Money(string currency, int amount)
+        {
+            Currency = currency;
+            Amount = amount;
+        }
+    }
 }

@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using HelloMicroservices;
 using HelloMicroservices.Controllers;
@@ -30,7 +31,7 @@ namespace HelloMicrosoervicesTests
         }
 
         [Test]
-        public void GetCartTest()
+        public async Task GetCartTest()
         {
             var logger = new Mock<ILogger<ShoppingCartController>>();
             var shoppingCartStore = new Mock<IShoppingCartStore>();
@@ -38,7 +39,7 @@ namespace HelloMicrosoervicesTests
             var eventStore = new Mock<IEventStore>();
 
             var shoppingCart = new ShoppingCart(124);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(shoppingCart);
+            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
             // request.Setup(x => x.Scheme).Returns("http");
@@ -54,16 +55,16 @@ namespace HelloMicrosoervicesTests
                 ControllerContext = controllerContext,
             };
 
-            var result = controller.Get(124);
+            var result = await controller.Get(124);
             Assert.AreSame(shoppingCart, result.Value);
             shoppingCartStore.VerifyAll();
             request.VerifyAll();
         }
 
         [Test]
-        public void AddCartItemTest()
+        public async Task AddCartItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", "Amount"));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 4532));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
             var logger = new Mock<ILogger<ShoppingCartController>>();
@@ -73,7 +74,7 @@ namespace HelloMicrosoervicesTests
             var eventStore = new Mock<IEventStore>();
 
             var shoppingCart = new ShoppingCart(124);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(shoppingCart);
+            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
             // request.Setup(x => x.Scheme).Returns("http");
@@ -89,17 +90,17 @@ namespace HelloMicrosoervicesTests
                 ControllerContext = controllerContext,
             };
 
-            var result = controller.Post(124, new[] { 12 });
-            Assert.IsTrue(result.IsCompletedSuccessfully);
+            var response = await controller.Post(124, new[] { 12 });
+            Assert.AreEqual(200, (response as StatusCodeResult)?.StatusCode);
             shoppingCartStore.VerifyAll();
             productCatalog.VerifyAll();
             request.VerifyAll();
         }
 
         [Test]
-        public void DeleteCartItemTest()
+        public async Task DeleteCartItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", "Amount"));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
             var logger = new Mock<ILogger<ShoppingCartController>>();
@@ -108,7 +109,7 @@ namespace HelloMicrosoervicesTests
             var eventStore = new Mock<IEventStore>();
 
             var shoppingCart = new ShoppingCart(124);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(shoppingCart);
+            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
             shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>()));
 
             var request = new Mock<HttpRequest>();
@@ -125,7 +126,7 @@ namespace HelloMicrosoervicesTests
                 ControllerContext = controllerContext,
             };
 
-            controller.Delete(124, new[] { 12 });
+            await controller.Delete(124, new[] { 12 });
             Assert.IsFalse(shoppingCart.Items.Any());
             shoppingCartStore.VerifyAll();
             request.VerifyAll();
