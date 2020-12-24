@@ -11,3 +11,5 @@ services:
       - "8087:80"
   cartdb:
     image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=postgres
