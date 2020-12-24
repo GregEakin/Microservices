@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  shoppingCart:
+    build: -f HelloMicroservices/Dockerfile .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8087:80"
+  shoppingCartDb:
+    image: postgres:13
