@@ -11,5 +11,8 @@ services:
       - "8087:80"
   cartdb:
     image: postgres:13
+    ports:
+      - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: "cartapp"
+      POSTGRES_PASSWORD: "cartpw"
