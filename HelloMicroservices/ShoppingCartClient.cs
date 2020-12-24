@@ -1,11 +1,10 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
 // SUBSYSTEM: HelloMicroservices
-// FILE:  ShopingCartClient.cs
+// FILE:  ShoppingCartClient.cs
 // AUTHOR:  Greg Eakin
 
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
