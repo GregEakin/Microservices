@@ -13,7 +13,7 @@ namespace ShoppingCartSvc.Carts
         public string ProductDescription { get; set; }
         public Money Price { get; set; }
 
-        public ShoppingCartItem() {}
+        public ShoppingCartItem() { }
 
         public ShoppingCartItem(
             int productCatalogId,
@@ -21,10 +21,12 @@ namespace ShoppingCartSvc.Carts
             string productDescription,
             Money price)
         {
-            this.ProductCatalogId = productCatalogId;
-            this.ProductName = productName;
-            this.ProductDescription = productDescription;
-            this.Price = price;
+            ProductCatalogId = productCatalogId;
+            ProductName = productName;
+            ProductDescription = productDescription;
+            Price = price ?? new Money("none", 7);
+            if (string.IsNullOrEmpty(Price.Currency))
+                Price.Currency = "Ukn";
         }
 
         public override bool Equals(object obj)

@@ -53,7 +53,7 @@ namespace ShoppingCartSvc.Catalog
                   int.Parse(p.ProductId),
                   p.ProductName,
                   p.ProductDescription,
-                  p.Price ?? new Money("none", 7)
+                  p.Price
               ));
         }
 
