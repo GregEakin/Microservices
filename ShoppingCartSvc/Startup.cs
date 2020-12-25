@@ -28,7 +28,7 @@ namespace ShoppingCartSvc
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShoppingCart", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShoppingCartSvc", Version = "v1" });
             });
         }
 
@@ -39,7 +39,7 @@ namespace ShoppingCartSvc
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShoppingCart v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShoppingCartSvc v1"));
             }
 
             app.UseRouting();
