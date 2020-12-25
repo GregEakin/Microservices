@@ -37,15 +37,11 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                     if (money == null)
                     {
                         Console.WriteLine("Money is null!");
+                        shoppingCartItem.Price ??= new Money("none", 9);
                         return shoppingCartItem;
                     }
 
-                    if (shoppingCartItem.Price == null)
-                    {
-                        Console.WriteLine("shoppingCart.Price is null!");
-                        shoppingCartItem.Price = new Money("none", 0);
-                    }
-
+                    shoppingCartItem.Price ??= new Money();
                     shoppingCartItem.Price.Amount = money.Amount;
                     shoppingCartItem.Price.Currency = money.Currency;
                     return shoppingCartItem;
@@ -76,16 +72,19 @@ values
                 tx).ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
-                Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId, 
-                    item.ProductName, item.ProductDescription, item.Price?.Amount, item.Price?.Currency);
+            {
+                item.Price ??= new Money("none", 1);
+                Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId,
+                    item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency);
+            }
 
             var items = shoppingCart.Items.Select(item => new
             {
-                shoppingCartId = shoppingCart.Id, 
-                item.ProductCatalogId, 
-                item.ProductName, 
-                item.ProductDescription, 
-                item.Price.Amount, 
+                shoppingCartId = shoppingCart.Id,
+                item.ProductCatalogId,
+                item.ProductName,
+                item.ProductDescription,
+                item.Price.Amount,
                 item.Price.Currency
             });
 
