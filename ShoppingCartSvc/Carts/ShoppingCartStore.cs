@@ -33,6 +33,10 @@ and ""ShoppingCart"".""UserId"" = @UserId";
             var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
                 (cartId, shoppingCartItem, money) =>
                 {
+                    Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", cartId, shoppingCartItem.ProductCatalogId,
+                        shoppingCartItem.ProductName, shoppingCartItem.ProductDescription, 
+                        shoppingCartItem.Price?.Amount, shoppingCartItem.Price?.Currency);
+
                     id = cartId;
                     if (money == null)
                     {
