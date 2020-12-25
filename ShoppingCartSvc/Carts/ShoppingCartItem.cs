@@ -8,10 +8,12 @@ namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartItem
     {
-        public int ProductCatalogId { get; }
-        public string ProductName { get; }
-        public string ProductDescription { get; }
-        public Money Price { get; }
+        public int ProductCatalogId { get; set; }
+        public string ProductName { get; set; }
+        public string ProductDescription { get; set; }
+        public Money Price { get; set; }
+
+        public ShoppingCartItem() {}
 
         public ShoppingCartItem(
             int productCatalogId,
