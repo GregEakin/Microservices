@@ -37,7 +37,7 @@ namespace ShoppingCartSvcTests
             var productCatalog = new Mock<IProductCatalogClient>();
             var eventStore = new Mock<IEventStore>();
 
-            var shoppingCart = new ShoppingCart(124);
+            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
             shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
@@ -72,7 +72,7 @@ namespace ShoppingCartSvcTests
             productCatalog.Setup(t => t.GetShoppingCartItems(new[] { 12 })).Returns(items);
             var eventStore = new Mock<IEventStore>();
 
-            var shoppingCart = new ShoppingCart(124);
+            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
             shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
@@ -107,7 +107,7 @@ namespace ShoppingCartSvcTests
             var productCatalog = new Mock<IProductCatalogClient>();
             var eventStore = new Mock<IEventStore>();
 
-            var shoppingCart = new ShoppingCart(124);
+            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
             shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
             shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>()));
 

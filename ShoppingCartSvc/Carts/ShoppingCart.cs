@@ -12,18 +12,6 @@ namespace ShoppingCartSvc.Models
 
         public IEnumerable<ShoppingCartItem> Items => _items;
 
-        public ShoppingCart(int userId)
-        {
-            UserId = userId;
-
-            if (userId != 42) return;
-            var item1 = new ShoppingCartItem(1, "Basic t-shirt", "a quiet t-shirt", new Money("eur", 40));
-            var item2 = new ShoppingCartItem(2, "Fancy shirt", "a loud t-shirt", new Money("eur", 50));
-            _items.Add(item1);
-            _items.Add(item2);
-
-        }
-
         public ShoppingCart(int userId, IEnumerable<ShoppingCartItem> items)
         {
             if (items == null)

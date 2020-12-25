@@ -36,7 +36,7 @@ namespace ShoppingCartSvcTests
 
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>()));
 
-            var cart = new ShoppingCart(234);
+            var cart = new ShoppingCart(234, new ShoppingCartItem[0]);
             cart.AddItems(items, _mockEventStore.Object);
 
             Assert.AreEqual(items, cart.Items);

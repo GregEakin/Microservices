@@ -72,7 +72,7 @@ namespace ShoppingCartSvc
             try
             {
                 // Create a new product
-                var shoppingCart = new ShoppingCart(42);
+                var shoppingCart = new ShoppingCart(42, new ShoppingCartItem[0]);
 
                 var url = await CreateShoppingCartAsync(shoppingCart);
                 Console.WriteLine($"Created at {url}");
