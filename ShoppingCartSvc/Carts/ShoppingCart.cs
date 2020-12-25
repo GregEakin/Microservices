@@ -8,16 +8,16 @@ namespace ShoppingCartSvc.Carts
     {
         private readonly HashSet<ShoppingCartItem> _items = new();
 
-        public int UserId { get; }
+        public int Id { get; }
 
         public IEnumerable<ShoppingCartItem> Items => _items;
 
-        public ShoppingCart(int userId, IEnumerable<ShoppingCartItem> items)
+        public ShoppingCart(int id, IEnumerable<ShoppingCartItem> items)
         {
             if (items == null)
                 return;
             
-            UserId = userId;
+            Id = id;
             foreach (var item in items)
                 _items.Add(item);
         }
@@ -34,7 +34,7 @@ namespace ShoppingCartSvc.Carts
             {
                 var added = _items.Add(item);
                 if (added)
-                    eventStore.Raise("ShoppingCartItemAdded", new { UserId, item });
+                    eventStore.Raise("ShoppingCartItemAdded", new { Id = Id, item });
             }
         }
 
@@ -48,7 +48,7 @@ namespace ShoppingCartSvc.Carts
             
             var count = _items.RemoveWhere(i => productCatalogIds.Contains(i.ProductCatalogId));
             foreach (var item in productCatalogIds)
-                eventStore.Raise("ShoppingCartItemRemoved", new { UserId, item });
+                eventStore.Raise("ShoppingCartItemRemoved", new { Id = Id, item });
         }
     }
 }

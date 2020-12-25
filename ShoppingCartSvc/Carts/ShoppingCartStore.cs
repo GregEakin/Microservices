@@ -16,7 +16,7 @@ namespace ShoppingCartSvc.Carts
             @"Host=microservices_cartdb_1;Port=5432;Database=cartapp;Username=cartapp;Password=cartpw";
 
         private const string readItemsSql =
-            @"select ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
+            @"select ""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
 from ""public"".""ShoppingCart"", ""public"".""ShoppingCartItems""
 where ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
 and ""ShoppingCart"".""UserId"" = @UserId";
@@ -25,25 +25,36 @@ and ""ShoppingCart"".""UserId"" = @UserId";
         {
             await using var conn = new NpgsqlConnection(connectionString);
             await conn.OpenAsync();
-            var items = await conn.QueryAsync<ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
-                (shoppingCartItem, money) =>
+            var id = -1;
+            var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
+                (cartId, shoppingCartItem, money) =>
                 {
-                    if (shoppingCartItem.Price == null) 
+                    id = cartId;
+                    if (money == null)
+                    {
+                        System.Console.WriteLine("Money is null!");
                         return shoppingCartItem;
-                    
+                    }
+
+                    if (shoppingCartItem.Price == null)
+                    {
+                        System.Console.WriteLine("shoppingCart.Price is null!");
+                        shoppingCartItem.Price = new Money();
+                    }
+
                     shoppingCartItem.Price.Amount = money.Amount;
                     shoppingCartItem.Price.Currency = money.Currency;
                     return shoppingCartItem;
                 },
                 new { UserId = userId },
                 splitOn: "Currency");
-            return new ShoppingCart(userId, items);
+            return new ShoppingCart(id, items);
         }
 
         // DELETE FROM table_name WHERE condition RETURNING(select_list | *)
         // DELETE FROM t1 USING t2 WHERE t1.id = t2.id
 
-        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" AS t1 USING ""ShoppingCart"" AS t2 WHERE t1.""ShoppingCartId"" = t2.id AND t2.""UserId"" = @UserId";
+        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" WHERE ""ShoppingCartId"" = @Id";
 
         private const string addAllForShoppingCartSql =
             @"insert into ""ShoppingCartItems"" (""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Amount"", ""Currency"")
@@ -57,8 +68,12 @@ values
             await using var tx = conn.BeginTransaction();
             await conn.ExecuteAsync(
                 deleteAllForShoppingCartSql,
-                new { UserId = shoppingCart.UserId },
+                new { Id = shoppingCart.Id },
                 tx).ConfigureAwait(false);
+
+            foreach (var item in shoppingCart.Items)
+                System.Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
+
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
                 shoppingCart.Items,

@@ -19,7 +19,7 @@ namespace ShoppingCartSvc.Carts
 
         public void ShowProduct(ShoppingCart cart)
         {
-            Console.WriteLine($"UserId: {cart.UserId}");
+            Console.WriteLine($"Id: {cart.Id}");
             foreach (var item in cart.Items)
             {
                 Console.WriteLine("    id: {0}, name: {1}, desc: {2}, {3} {4}", item.ProductCatalogId, item.ProductName,
@@ -47,7 +47,7 @@ namespace ShoppingCartSvc.Carts
 
         public async Task<ShoppingCart> UpdateProductAsync(ShoppingCart shoppingCart)
         {
-            var response = await _client.PutAsJsonAsync($"api/ShoppingCart/{shoppingCart.UserId}", shoppingCart);
+            var response = await _client.PutAsJsonAsync($"api/ShoppingCart/{shoppingCart.Id}", shoppingCart);
             response.EnsureSuccessStatusCode();
 
             // Deserialize the updated product from the response body.
