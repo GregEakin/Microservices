@@ -39,7 +39,7 @@ and ""ShoppingCart"".""UserId"" = @UserId";
         // DELETE FROM table_name WHERE condition RETURNING(select_list | *)
         // DELETE FROM t1 USING t2 WHERE t1.id = t2.id
 
-        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" AS t1 USING ""ShoppingCart"" AS t2 WHERE t1.""ShoppingCartId"" = t2.id AND t2.""UserID"" = @UserId";
+        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" AS t1 USING ""ShoppingCart"" AS t2 WHERE t1.""ShoppingCartId"" = t2.id AND t2.""UserId"" = @UserId";
 
         private const string addAllForShoppingCartSql =
             @"insert into ""ShoppingCartItems"" (""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Amount"", ""Currency"")
