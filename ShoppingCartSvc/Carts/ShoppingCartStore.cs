@@ -47,7 +47,7 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                     return shoppingCartItem;
                 },
                 new { UserId = userId },
-                splitOn: "Currency");
+                splitOn: "ProductCatalogId,Currency");
             return new ShoppingCart(id, items);
         }
 
@@ -76,7 +76,7 @@ values
 
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
-                shoppingCart.Items,
+                new object[] {shoppingCart.Id, shoppingCart.Items},
                 tx).ConfigureAwait(false);
         }
     }
