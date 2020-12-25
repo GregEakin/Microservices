@@ -28,6 +28,9 @@ and ""ShoppingCart"".""UserId"" = @UserId";
             var items = await conn.QueryAsync<ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
                 (shoppingCartItem, money) =>
                 {
+                    if (shoppingCartItem.Price == null) 
+                        return shoppingCartItem;
+                    
                     shoppingCartItem.Price.Amount = money.Amount;
                     shoppingCartItem.Price.Currency = money.Currency;
                     return shoppingCartItem;
