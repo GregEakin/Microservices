@@ -4,11 +4,11 @@
 // FILE:  IProductCatalogClient.cs
 // AUTHOR:  Greg Eakin
 
+using ShoppingCartSvc.Carts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShoppingCartSvc.Models;
 
-namespace ShoppingCartSvc
+namespace ShoppingCartSvc.Catalog
 {
     public interface IProductCatalogClient
     {

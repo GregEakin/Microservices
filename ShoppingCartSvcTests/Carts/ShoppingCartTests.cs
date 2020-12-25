@@ -4,11 +4,14 @@
 // FILE:  ShoppingCartTests.cs
 // AUTHOR:  Greg Eakin
 
-using System.Linq;
 using Moq;
 using NUnit.Framework;
+using ShoppingCartSvc.Carts;
+using ShoppingCartSvc.Catalog;
 using ShoppingCartSvc.EventFeed;
-using ShoppingCartSvc.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
 namespace ShoppingCartSvcTests.Carts
 {
@@ -51,10 +54,46 @@ namespace ShoppingCartSvcTests.Carts
             var cart = new ShoppingCart(234, items);
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>()));
 
-            cart.RemoveItems(new []{12}, _mockEventStore.Object);
+            cart.RemoveItems(new[] { 12 }, _mockEventStore.Object);
 
             Assert.IsFalse(cart.Items.Any());
             _mockEventStore.VerifyAll();
+        }
+
+        [Test]
+        public void Test1()
+        {
+            var msg = "[{\"ProductId\":\"0\",\"ProductName\":\"foo0\",\"ProductDescription\":\"bar\",\"Price\":{}},"
+                      + "{\"ProductId\":\"2\",\"ProductName\":\"foo2\",\"ProductDescription\":\"bar\",\"Price\":{}},"
+                      + "{\"ProductId\":\"3\",\"ProductName\":\"foo3\",\"ProductDescription\":\"bar\",\"Price\":{}}]";
+            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(msg);
+
+            Assert.IsNotNull(products);
+            Assert.AreEqual(3, products.Count);
+            Assert.AreEqual("0", products[0].ProductId);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test2()
+        {
+            var msg = "{\"ProductId\":\"0\",\"ProductName\":\"foo0\",\"ProductDescription\":\"bar\",\"Price\":{}}";
+            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg);
+
+            Assert.IsNotNull(product);
+            Assert.AreEqual("0", product.ProductId);
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test3()
+        {
+            var msg = "{\"ProductId\":\"0\"}";
+            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg);
+
+            Assert.IsNotNull(product);
+            Assert.AreEqual("0", product.ProductId);
+            Assert.Pass();
         }
     }
 }

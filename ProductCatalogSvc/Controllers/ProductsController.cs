@@ -21,7 +21,7 @@ namespace ProductCatalogSvc.Controllers
         }
 
         // GET api/<ProductsController>/products
-        [HttpGet("items")]
+        [HttpGet("products")]
         [ResponseCache(VaryByHeader = "User-Agent", Duration = 86400)]
         public IEnumerable<ProductCatalogProduct> Get([FromQuery] int[] id)
         {

@@ -4,11 +4,11 @@
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
+using Dapper;
 using Npgsql;
 using System.Threading.Tasks;
-using Dapper;
 
-namespace ShoppingCartSvc.Models
+namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartStore : IShoppingCartStore
     {

@@ -6,7 +6,7 @@
 
 using System.Threading.Tasks;
 
-namespace ShoppingCartSvc.Models
+namespace ShoppingCartSvc.Carts
 {
     public interface IShoppingCartStore
     {

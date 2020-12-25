@@ -4,15 +4,15 @@
 // FILE:  ProductCatalogProduct.cs
 // AUTHOR:  Greg Eakin
 
+using ShoppingCartSvc.Carts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using ShoppingCartSvc.Models;
 using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace ShoppingCartSvc
+namespace ShoppingCartSvc.Catalog
 {
     public class ProductCatalogClient : IProductCatalogClient
     {
@@ -21,8 +21,10 @@ namespace ShoppingCartSvc
         //       3,
         //       attempt => TimeSpan.FromMilliseconds(100 * Math.Pow(2, attempt)), (ex, _) => Console.WriteLine(ex.ToString()));
 
-        private const string productCatalogBaseUrl = @"http://private-05cc8-chapter2productcataloguemicroservice.apiary-mock.com";
-        private const string getProductPathTemplate = "/products?productIds=[{0}]";
+
+        // http://192.168.40.140:8086/api/Products/items?id=2&id=3
+        private const string productCatalogBaseUrl = @"http://192.168.40.140:8086/api/";
+        private const string getProductPathTemplate = "Products/items?id={0}";
 
         public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>
             // exponentialRetryPolicy.ExecuteAsync(async () => await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false));
@@ -34,9 +36,9 @@ namespace ShoppingCartSvc
             return await ConvertToShoppingCartItems(response).ConfigureAwait(false);
         }
 
-        private static async Task<HttpResponseMessage> RequestProductFromProductCatalog(int[] productCatalogIds)
+        private static async Task<HttpResponseMessage> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
         {
-            var productsResource = string.Format(getProductPathTemplate, string.Join(",", productCatalogIds));
+            var productsResource = string.Format(getProductPathTemplate, string.Join("&id=", productCatalogIds));
             using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
             return await httpClient.GetAsync(productsResource).ConfigureAwait(false);
         }
@@ -44,7 +46,8 @@ namespace ShoppingCartSvc
         private static async Task<IEnumerable<ShoppingCartItem>> ConvertToShoppingCartItems(HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
-            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var readAsStringAsync = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(readAsStringAsync);
             return products.Select(p => new ShoppingCartItem(
                   int.Parse(p.ProductId),
                   p.ProductName,
@@ -53,6 +56,22 @@ namespace ShoppingCartSvc
               ));
         }
 
-        private record ProductCatalogProduct(string ProductId, string ProductName, string ProductDescription, Money Price);
+        public record ProductCatalogProduct3(string ProductId, string ProductName, string ProductDescription, Money Price);
+    }
+
+    public class ProductCatalogProduct
+    {
+        public ProductCatalogProduct(string productId, string productName, string productDescription, Money price)
+        {
+            ProductId = productId;
+            ProductName = productName;
+            ProductDescription = productDescription;
+            Price = price;
+        }
+
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string ProductDescription { get; set; }
+        public Money Price { get; set; }
     }
 }

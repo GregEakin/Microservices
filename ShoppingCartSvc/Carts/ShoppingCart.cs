@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShoppingCartSvc.Models
+namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCart
     {

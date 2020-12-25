@@ -4,7 +4,7 @@
 // FILE:  ShoppingCartItem.cs
 // AUTHOR:  Greg Eakin
 
-namespace ShoppingCartSvc.Models
+namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartItem
     {

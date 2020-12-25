@@ -4,15 +4,15 @@
 // FILE:  ShoppingCartControllerTests.cs
 // AUTHOR:  Greg Eakin
 
-using ShoppingCartSvc;
-using ShoppingCartSvc.Controllers;
-using ShoppingCartSvc.EventFeed;
-using ShoppingCartSvc.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using ShoppingCartSvc.Carts;
+using ShoppingCartSvc.Catalog;
+using ShoppingCartSvc.Controllers;
+using ShoppingCartSvc.EventFeed;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
