@@ -35,7 +35,7 @@ create table "EventStore"
 (
 	id integer not null
 		constraint eventstore_pk
-			primary key,
+			SERIAL primary key,
 	"Name" varchar(100) not null,
 	"OccurredAt" timestamp not null,
 	"Content" varchar not null
