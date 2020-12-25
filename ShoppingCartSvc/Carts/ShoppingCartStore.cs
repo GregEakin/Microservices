@@ -35,7 +35,7 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                 {
                     Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", cartId, shoppingCartItem.ProductCatalogId,
                         shoppingCartItem.ProductName, shoppingCartItem.ProductDescription, 
-                        shoppingCartItem.Price?.Amount, shoppingCartItem.Price?.Currency);
+                        money?.Amount, money?.Currency);
 
                     id = cartId;
                     if (money == null)
@@ -54,9 +54,6 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                 splitOn: "ProductCatalogId,Currency");
             return new ShoppingCart(id, items);
         }
-
-        // DELETE FROM table_name WHERE condition RETURNING(select_list | *)
-        // DELETE FROM t1 USING t2 WHERE t1.id = t2.id
 
         private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" WHERE ""ShoppingCartId"" = @Id";
 
