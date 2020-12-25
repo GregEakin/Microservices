@@ -24,6 +24,7 @@ and ""ShoppingCart"".""UserId"" = @UserId";
         public async Task<ShoppingCart> Get(int userId)
         {
             await using var conn = new NpgsqlConnection(connectionString);
+            await conn.OpenAsync();
             var items = await conn.QueryAsync<ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
                 (shoppingCartItem, money) =>
                 {
