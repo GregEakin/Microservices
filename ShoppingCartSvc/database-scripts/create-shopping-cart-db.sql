@@ -1,25 +1,27 @@
 ﻿create table "ShoppingCart"
 (
-	id integer not null
+	id serial not null
 		constraint shoppingcart_pk
-			SERIAL primary key,
-	"UserId" bigint not null
+			primary key,
+	"UserId" int not null
+		constraint userid_key
+			unique
 );
-
-/* alter table "ShoppingCart" owner to cartapp; */
 
 create index "ShoppingCart_UserId"
 	on "ShoppingCart" ("UserId");
 
+/* alter table "ShoppingCart" owner to cartapp; */
+
 create table "ShoppingCartItems"
 (
-	id integer not null
+	id serial not null
 		constraint shoppingcartitems_pk
-			SERIAL primary key,
-	"ShoppingCartId" integer not null
+			primary key,
+	"ShoppingCartId" int not null
 		constraint "FK_ShoppingCart"
 			references "ShoppingCart",
-	"ProductCatalogId" bigint not null,
+	"ProductCatalogId" int not null,
 	"ProductName" varchar(100) not null,
 	"ProductDescription" varchar(500),
 	"Amount" integer not null,
@@ -33,12 +35,13 @@ create index "ShoppingCartItems_ShoppingCartId"
 
 create table "EventStore"
 (
-	id integer not null
+	id serial not null
 		constraint eventstore_pk
-			SERIAL primary key,
+			primary key,
 	"Name" varchar(100) not null,
 	"OccurredAt" timestamp not null,
 	"Content" varchar not null
 );
 
 /* alter table "EventStore" owner to cartapp; */
+
