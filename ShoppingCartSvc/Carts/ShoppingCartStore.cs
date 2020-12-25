@@ -37,12 +37,9 @@ and ""ShoppingCart"".""UserId"" = @UserId";
         private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" AS t1 USING ""ShoppingCart"" AS t2 WHERE t1.""ShoppingCartId"" = t2.id AND t2.""UserID"" = @UserId";
 
         private const string addAllForShoppingCartSql =
-            @"insert into ShoppingCartItems 
-(ShoppingCartId, ProductCatalogId, ProductName, 
-ProductDescription, Amount, Currency)
+            @"insert into ""ShoppingCartItems"" (""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Amount"", ""Currency"")
 values 
-(@ShoppingCartId, @ProductCatalogId, @ProductName,v
-@ProductDescription, @Amount, @Currency)";
+(@ShoppingCartId, @ProductCatalogId, @ProductName, @ProductDescription, @Amount, @Currency)";
 
         public async Task Save(ShoppingCart shoppingCart)
         {
