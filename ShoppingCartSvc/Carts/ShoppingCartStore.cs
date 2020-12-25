@@ -35,13 +35,13 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                     id = cartId;
                     if (money == null)
                     {
-                        System.Console.WriteLine("Money is null!");
+                        Console.WriteLine("Money is null!");
                         return shoppingCartItem;
                     }
 
                     if (shoppingCartItem.Price == null)
                     {
-                        System.Console.WriteLine("shoppingCart.Price is null!");
+                        Console.WriteLine("shoppingCart.Price is null!");
                         shoppingCartItem.Price = new Money();
                     }
 
@@ -75,9 +75,15 @@ values
                 tx).ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
-                System.Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
+                Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
 
-            var items = shoppingCart.Items.Select(item => new System.Tuple<int, int, string, string, int, string>(shoppingCart.Id, item.ProductCatalogId, item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency));
+            var items = shoppingCart.Items.Select(item => (
+                shoppingCartId: shoppingCart.Id, 
+                productCatalogId: item.ProductCatalogId,
+                productName: item.ProductName,
+                productDescription: item.ProductDescription,
+                amout: item.Price.Amount,
+                currency: item.Price.Currency));
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
                 items,
