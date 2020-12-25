@@ -23,7 +23,7 @@ namespace ShoppingCartSvc.Catalog
 
 
         // http://192.168.40.140:8086/api/Products/items?id=2&id=3
-        private const string productCatalogBaseUrl = @"http://productsvc/api/";
+        private const string productCatalogBaseUrl = @"http://microservices_productsvc_1/api/";
         private const string getProductPathTemplate = "Products/items?id={0}";
 
         public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>

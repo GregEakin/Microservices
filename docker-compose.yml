@@ -1,6 +1,16 @@
 version: "3.9"
 
 services:
+  productsvc:
+    build: 
+      context: .
+      dockerfile: ProductCatalogSvc/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8086:80"
+    networks:
+      - bus
   cartdb:
     image: postgres:13
     environment:
@@ -20,19 +30,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8087:80"
+    depends_on:
+      - cartdb
+      - productsvc
     networks:
       - bus
       - db
-  productsvc:
-    build: 
-      context: .
-      dockerfile: ProductCatalogSvc/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "8086:80"
-    networks:
-      - bus
 networks:
   bus:
   db:

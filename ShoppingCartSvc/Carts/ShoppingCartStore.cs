@@ -13,7 +13,7 @@ namespace ShoppingCartSvc.Carts
     public class ShoppingCartStore : IShoppingCartStore
     {
         private const string connectionString =
-            @"Host=cartdb;Port=5432;Database=cartapp;Username=cartapp;Password=cartpw";
+            @"Host=microservices_cartdb_1;Port=5432;Database=cartapp;Username=cartapp;Password=cartpw";
 
         private const string readItemsSql =
             @"select ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
