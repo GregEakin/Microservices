@@ -25,7 +25,12 @@ and ""ShoppingCart"".""UserId"" = @UserId";
         {
             await using var conn = new NpgsqlConnection(connectionString);
             var items = await conn.QueryAsync<ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
-                (shoppingCartItem, money) => { shoppingCartItem.Price = money; return shoppingCartItem; },
+                (shoppingCartItem, money) =>
+                {
+                    shoppingCartItem.Price.Amount = money.Amount;
+                    shoppingCartItem.Price.Currency = money.Currency;
+                    return shoppingCartItem;
+                },
                 new { UserId = userId },
                 splitOn: "Currency");
             return new ShoppingCart(userId, items);

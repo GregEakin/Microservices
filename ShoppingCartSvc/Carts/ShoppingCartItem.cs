@@ -8,21 +8,35 @@ namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartItem
     {
-        public int ProductCatalogId { get; set;  }
-        public string ProductName { get; set;  } 
-        public string ProductDescription { get; set; }
-        public Money Price { get; set; }
+        public int ProductCatalogId { get; }
+        public string ProductName { get; }
+        public string ProductDescription { get; }
+        public Money Price { get; }
 
-        public ShoppingCartItem()
+        public ShoppingCartItem(
+            int productCatalogId,
+            string productName,
+            string productDescription,
+            Money price)
         {
+            this.ProductCatalogId = productCatalogId;
+            this.ProductName = productName;
+            this.ProductDescription = productDescription;
+            this.Price = price;
         }
-        
-        public ShoppingCartItem(int productCatalogId, string productName, string productDescription, Money price)
+
+        public override bool Equals(object obj)
         {
-            ProductCatalogId = productCatalogId;
-            ProductName = productName;
-            ProductDescription = productDescription;
-            Price = price;
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var that = obj as ShoppingCartItem;
+            return this.ProductCatalogId.Equals(that.ProductCatalogId);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ProductCatalogId.GetHashCode();
         }
     }
 }
