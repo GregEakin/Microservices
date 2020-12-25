@@ -4,10 +4,6 @@
 // FILE:  ShoppingCartControllerTests.cs
 // AUTHOR:  Greg Eakin
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using HelloMicroservices;
 using HelloMicroservices.Controllers;
 using HelloMicroservices.EventFeed;
@@ -17,6 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HelloMicrosoervicesTests
 {

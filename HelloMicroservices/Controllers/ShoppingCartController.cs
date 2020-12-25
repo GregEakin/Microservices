@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using HelloMicroservices.EventFeed;
+﻿using HelloMicroservices.EventFeed;
 using HelloMicroservices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
