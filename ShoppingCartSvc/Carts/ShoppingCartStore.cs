@@ -35,13 +35,13 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                     id = cartId;
                     if (money == null)
                     {
-                        Console.WriteLine("Money is null!");
+                        System.Console.WriteLine("Money is null!");
                         return shoppingCartItem;
                     }
 
                     if (shoppingCartItem.Price == null)
                     {
-                        Console.WriteLine("shoppingCart.Price is null!");
+                        System.Console.WriteLine("shoppingCart.Price is null!");
                         shoppingCartItem.Price = new Money();
                     }
 
@@ -75,15 +75,17 @@ values
                 tx).ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
-                Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
+                System.Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
 
-            var items = shoppingCart.Items.Select(item => (
-                shoppingCartId: shoppingCart.Id, 
-                productCatalogId: item.ProductCatalogId,
-                productName: item.ProductName,
-                productDescription: item.ProductDescription,
-                amout: item.Price.Amount,
-                currency: item.Price.Currency));
+            // var items = shoppingCart.Items.Select(item => (
+            //     shoppingCartId: shoppingCart.Id,
+            //     productCatalogId: item.ProductCatalogId,
+            //     productName: item.ProductName,
+            //     productDescription: item.ProductDescription,
+            //     amout: item.Price.Amount,
+            //     currency: item.Price.Currency));
+            var items = shoppingCart.Items.Select(item => new {shoppingCart.Id, item.ProductCatalogId, item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency});
+
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
                 items,
