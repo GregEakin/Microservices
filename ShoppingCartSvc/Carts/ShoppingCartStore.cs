@@ -47,6 +47,7 @@ values
         public async Task Save(ShoppingCart shoppingCart)
         {
             await using var conn = new NpgsqlConnection(connectionString);
+            await conn.OpenAsync();
             await using var tx = conn.BeginTransaction();
             await conn.ExecuteAsync(
                 deleteAllForShoppingCartSql,

@@ -47,7 +47,8 @@ namespace ShoppingCartSvc.Catalog
         {
             response.EnsureSuccessStatusCode();
             var readAsStringAsync = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(readAsStringAsync);
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(readAsStringAsync, options);
             return products.Select(p => new ShoppingCartItem(
                   int.Parse(p.ProductId),
                   p.ProductName,

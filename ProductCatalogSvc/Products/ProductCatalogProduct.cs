@@ -4,6 +4,8 @@
 // FILE:  ProductCatalogProduct.cs
 // AUTHOR:  Greg Eakin
 
+using System.Text.Json.Serialization;
+
 namespace ProductCatalogSvc.Products
 {
     public class ProductCatalogProduct
@@ -15,9 +17,17 @@ namespace ProductCatalogSvc.Products
             ProductDescription = description;
             Price = price;
         }
+
+        [JsonPropertyName("productId")]
         public string ProductId { get; private set; }
+        
+        [JsonPropertyName("productName")]
         public string ProductName { get; private set; }
+        
+        [JsonPropertyName("productDescription")]
         public string ProductDescription { get; private set; }
+
+        [JsonPropertyName("price")]
         public Money Price { get; private set; }
     }
 }

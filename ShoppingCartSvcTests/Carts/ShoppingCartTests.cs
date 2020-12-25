@@ -63,10 +63,11 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public void Test1()
         {
-            var msg = "[{\"ProductId\":\"0\",\"ProductName\":\"foo0\",\"ProductDescription\":\"bar\",\"Price\":{}},"
-                      + "{\"ProductId\":\"2\",\"ProductName\":\"foo2\",\"ProductDescription\":\"bar\",\"Price\":{}},"
-                      + "{\"ProductId\":\"3\",\"ProductName\":\"foo3\",\"ProductDescription\":\"bar\",\"Price\":{}}]";
-            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(msg);
+            var msg = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}},"
+                      + "{\"productId\":\"2\",\"productName\":\"foo2\",\"productDescription\":\"bar\",\"price\":{}},"
+                      + "{\"productId\":\"3\",\"productName\":\"foo3\",\"productDescription\":\"bar\",\"price\":{}}]";
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(msg, options);
 
             Assert.IsNotNull(products);
             Assert.AreEqual(3, products.Count);
@@ -77,8 +78,9 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public void Test2()
         {
-            var msg = "{\"ProductId\":\"0\",\"ProductName\":\"foo0\",\"ProductDescription\":\"bar\",\"Price\":{}}";
-            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg);
+            var msg = "{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}";
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
             Assert.IsNotNull(product);
             Assert.AreEqual("0", product.ProductId);
@@ -88,8 +90,9 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public void Test3()
         {
-            var msg = "{\"ProductId\":\"0\"}";
-            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg);
+            var msg = "{\"productId\":\"0\"}";
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
             Assert.IsNotNull(product);
             Assert.AreEqual("0", product.ProductId);
