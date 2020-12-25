@@ -2,7 +2,7 @@
 (
 	id integer not null
 		constraint shoppingcart_pk
-			primary key,
+			SERIAL primary key,
 	"UserId" bigint not null
 );
 
@@ -15,7 +15,7 @@ create table "ShoppingCartItems"
 (
 	id integer not null
 		constraint shoppingcartitems_pk
-			primary key,
+			SERIAL primary key,
 	"ShoppingCartId" integer not null
 		constraint "FK_ShoppingCart"
 			references "ShoppingCart",

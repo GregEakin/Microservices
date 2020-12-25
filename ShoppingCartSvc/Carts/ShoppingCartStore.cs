@@ -31,10 +31,10 @@ and ""ShoppingCart"".""UserId"" = @UserId";
             return new ShoppingCart(userId, items);
         }
 
-        private const string deleteAllForShoppingCartSql =
-            @"delete item from ShoppingCartItems item
-inner join ShoppingCart cart on item.ShoppingCartId = cart.ID
-and cart.UserId=@UserId";
+        // DELETE FROM table_name WHERE condition RETURNING(select_list | *)
+        // DELETE FROM t1 USING t2 WHERE t1.id = t2.id
+
+        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" AS t1 USING ""ShoppingCart"" AS t2 WHERE t1.""ShoppingCartId"" = t2.id AND t2.""UserID"" = @UserId";
 
         private const string addAllForShoppingCartSql =
             @"insert into ShoppingCartItems 
