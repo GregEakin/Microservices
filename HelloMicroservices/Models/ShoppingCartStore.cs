@@ -17,7 +17,7 @@ namespace HelloMicroservices.Models
 
         private const string readItemsSql =
             @"select ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
-from ""dbo"".""ShoppingCart"", ""dbo"".""ShoppingCartItems""
+from ""ShoppingCart"", ""ShoppingCartItems""
 where ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
 and ""ShoppingCart"".""UserId"" = @UserId";
 

@@ -9,6 +9,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8087:80"
+    links:
+      - cartdb
   cartdb:
     image: postgres:13
     ports:
@@ -16,3 +18,5 @@ services:
     environment:
       POSTGRES_USER: "cartapp"
       POSTGRES_PASSWORD: "cartpw"
+    volumes:
+      - ./HelloMicroservices/database-scripts/:/docker-entrypoint-initdb.d
