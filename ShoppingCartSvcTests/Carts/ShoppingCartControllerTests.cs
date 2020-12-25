@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShoppingCartSvcTests
+namespace ShoppingCartSvcTests.Carts
 {
     public class CartControllerTests
     {

@@ -12,7 +12,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using ShoppingCartSvc.Models;
 
-namespace ShoppingCartSvc
+namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartClient
     {

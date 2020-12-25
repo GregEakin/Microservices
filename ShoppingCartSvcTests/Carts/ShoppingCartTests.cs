@@ -5,12 +5,12 @@
 // AUTHOR:  Greg Eakin
 
 using System.Linq;
-using ShoppingCartSvc.EventFeed;
-using ShoppingCartSvc.Models;
 using Moq;
 using NUnit.Framework;
+using ShoppingCartSvc.EventFeed;
+using ShoppingCartSvc.Models;
 
-namespace ShoppingCartSvcTests
+namespace ShoppingCartSvcTests.Carts
 {
     public class CartTests
     {
