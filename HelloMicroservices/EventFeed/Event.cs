@@ -8,5 +8,5 @@ using System;
 
 namespace HelloMicroservices.EventFeed
 {
-    public record Event(long SequenceNumber, DateTimeOffset OccurredAt, string Name, object Content);
+    public record Event(long SequenceNumber, DateTime OccurredAt, string Name, object Content);
 }

@@ -37,7 +37,7 @@ create table "EventStore"
 		constraint eventstore_pk
 			primary key,
 	"Name" varchar(100) not null,
-	"OccurredAt" date not null,
+	"OccurredAt" timestamp not null,
 	"Content" varchar not null
 );
 

@@ -26,7 +26,7 @@ namespace HelloMicroservices.EventFeed
         public void Raise(string eventName, object content)
         {
             var seqNumber = Interlocked.Increment(ref _currentSequenceNumber);
-            var @event = new Event(seqNumber, DateTimeOffset.UtcNow, eventName, content);
+            var @event = new Event(seqNumber, DateTime.UtcNow, eventName, content);
             Database.Add(@event);
         }
     }
