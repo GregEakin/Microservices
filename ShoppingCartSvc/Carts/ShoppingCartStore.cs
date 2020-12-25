@@ -10,6 +10,7 @@ using System.Linq;
 using Dapper;
 using Npgsql;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ShoppingCartSvc.Carts
 {
@@ -35,13 +36,13 @@ and ""ShoppingCart"".""UserId"" = @UserId";
                     id = cartId;
                     if (money == null)
                     {
-                        System.Console.WriteLine("Money is null!");
+                        Console.WriteLine("Money is null!");
                         return shoppingCartItem;
                     }
 
                     if (shoppingCartItem.Price == null)
                     {
-                        System.Console.WriteLine("shoppingCart.Price is null!");
+                        Console.WriteLine("shoppingCart.Price is null!");
                         shoppingCartItem.Price = new Money("none", 0);
                     }
 
@@ -75,7 +76,8 @@ values
                 tx).ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
-                System.Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
+                Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId, 
+                    item.ProductName, item.ProductDescription, item.Price?.Amount, item.Price?.Currency);
 
             var items = shoppingCart.Items.Select(item => new
             {
