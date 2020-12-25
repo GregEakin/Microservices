@@ -84,7 +84,10 @@ values
             //     productDescription: item.ProductDescription,
             //     amout: item.Price.Amount,
             //     currency: item.Price.Currency));
-            var items = shoppingCart.Items.Select(item => new {shoppingCart.Id, item.ProductCatalogId, item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency});
+            var items = shoppingCart.Items.Select(item => new
+            {
+                shoppingCartId = shoppingCart.Id, item.ProductCatalogId, item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency
+            });
 
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
