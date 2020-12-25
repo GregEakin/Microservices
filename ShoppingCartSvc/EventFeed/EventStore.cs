@@ -1,6 +1,6 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  EventStore.cs
 // AUTHOR:  Greg Eakin
 
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace HelloMicroservices.EventFeed
+namespace ShoppingCartSvc.EventFeed
 {
     public class EventStore : IEventStore
     {

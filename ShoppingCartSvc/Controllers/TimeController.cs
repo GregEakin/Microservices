@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace HelloMicroservices.Controllers
+namespace ShoppingCartSvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,18 +1,18 @@
 // Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicrosoervicesTests
+// SUBSYSTEM: ShoppingCartTests
 // FILE:  ShoppingCartTests.cs
 // AUTHOR:  Greg Eakin
 
 using System.Linq;
-using HelloMicroservices.EventFeed;
-using HelloMicroservices.Models;
+using ShoppingCartSvc.EventFeed;
+using ShoppingCartSvc.Models;
 using Moq;
 using NUnit.Framework;
 
-namespace HelloMicrosoervicesTests
+namespace ShoppingCartSvcTests
 {
-    public class ShoppingCartTests
+    public class CartTests
     {
         private Mock<IEventStore> _mockEventStore;
 

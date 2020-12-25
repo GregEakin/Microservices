@@ -1,10 +1,10 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  ShoppingCartItem.cs
 // AUTHOR:  Greg Eakin
 
-namespace HelloMicroservices.Models
+namespace ShoppingCartSvc.Models
 {
     public class ShoppingCartItem
     {

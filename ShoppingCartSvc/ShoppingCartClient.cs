@@ -1,6 +1,6 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  ShoppingCartClient.cs
 // AUTHOR:  Greg Eakin
 
@@ -10,9 +10,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using HelloMicroservices.Models;
+using ShoppingCartSvc.Models;
 
-namespace HelloMicroservices
+namespace ShoppingCartSvc
 {
     public class ShoppingCartClient
     {

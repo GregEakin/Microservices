@@ -1,13 +1,13 @@
 // Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicrosoervicesTests
+// SUBSYSTEM: ShoppingCartTests
 // FILE:  ShoppingCartControllerTests.cs
 // AUTHOR:  Greg Eakin
 
-using HelloMicroservices;
-using HelloMicroservices.Controllers;
-using HelloMicroservices.EventFeed;
-using HelloMicroservices.Models;
+using ShoppingCartSvc;
+using ShoppingCartSvc.Controllers;
+using ShoppingCartSvc.EventFeed;
+using ShoppingCartSvc.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,9 +17,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HelloMicrosoervicesTests
+namespace ShoppingCartSvcTests
 {
-    public class ShoppingCartControllerTests
+    public class CartControllerTests
     {
         [SetUp]
         public void Setup()

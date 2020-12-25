@@ -1,14 +1,14 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  IProductCatalogClient.cs
 // AUTHOR:  Greg Eakin
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HelloMicroservices.Models;
+using ShoppingCartSvc.Models;
 
-namespace HelloMicroservices
+namespace ShoppingCartSvc
 {
     public interface IProductCatalogClient
     {

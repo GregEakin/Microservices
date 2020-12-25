@@ -1,8 +1,8 @@
-﻿using HelloMicroservices.EventFeed;
+﻿using ShoppingCartSvc.EventFeed;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HelloMicroservices.Models
+namespace ShoppingCartSvc.Models
 {
     public class ShoppingCart
     {

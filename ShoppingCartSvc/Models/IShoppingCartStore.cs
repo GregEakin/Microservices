@@ -1,12 +1,12 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  IShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
 using System.Threading.Tasks;
 
-namespace HelloMicroservices.Models
+namespace ShoppingCartSvc.Models
 {
     public interface IShoppingCartStore
     {

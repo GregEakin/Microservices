@@ -1,6 +1,6 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  ICache.cs
 // AUTHOR:  Greg Eakin
 
@@ -8,7 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace HelloMicroservices
+namespace ShoppingCartSvc
 {
     public interface ICache
     {

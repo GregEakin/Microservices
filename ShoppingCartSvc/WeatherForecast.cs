@@ -1,6 +1,6 @@
 using System;
 
-namespace HelloMicroservices
+namespace ShoppingCartSvc
 {
     public class WeatherForecast
     {

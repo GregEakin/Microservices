@@ -1,6 +1,6 @@
 ﻿// Copyright © 2020-2020. All Rights Reserved.
 // 
-// SUBSYSTEM: HelloMicroservices
+// SUBSYSTEM: ShoppingCart
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
@@ -8,7 +8,7 @@ using Npgsql;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace HelloMicroservices.Models
+namespace ShoppingCartSvc.Models
 {
     public class ShoppingCartStore : IShoppingCartStore
     {

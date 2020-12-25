@@ -1,12 +1,12 @@
-﻿using HelloMicroservices.EventFeed;
-using HelloMicroservices.Models;
+﻿using ShoppingCartSvc.EventFeed;
+using ShoppingCartSvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace HelloMicroservices.Controllers
+namespace ShoppingCartSvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

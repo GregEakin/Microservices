@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["HelloMicroservices/HelloMicroservices.csproj", "HelloMicroservices/"]
-RUN dotnet restore "HelloMicroservices/HelloMicroservices.csproj"
+COPY ["ShoppingCartSvc/ShoppingCartSvc.csproj", "ShoppingCartSvc/"]
+RUN dotnet restore "ShoppingCartSvc/ShoppingCartSvc.csproj"
 COPY . .
-WORKDIR "/src/HelloMicroservices"
-RUN dotnet build "HelloMicroservices.csproj" -c Release -o /app/build
+WORKDIR "/src/ShoppingCartSvc"
+RUN dotnet build "ShoppingCartSvc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "HelloMicroservices.csproj" -c Release -o /app/publish
+RUN dotnet publish "ShoppingCartSvc.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "HelloMicroservices.dll"]
+ENTRYPOINT ["dotnet", "ShoppingCartSvc.dll"]
