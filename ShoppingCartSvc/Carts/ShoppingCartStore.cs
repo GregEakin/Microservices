@@ -4,6 +4,9 @@
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Dapper;
 using Npgsql;
 using System.Threading.Tasks;
@@ -74,9 +77,10 @@ values
             foreach (var item in shoppingCart.Items)
                 System.Console.WriteLine("Item: {0}, {1}, {2}", shoppingCart.Id, item.ProductCatalogId, item.ProductName);
 
+            var items = shoppingCart.Items.Select(item => new System.Tuple<int, int, string, string, int, string>(shoppingCart.Id, item.ProductCatalogId, item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency));
             await conn.ExecuteAsync(
                 addAllForShoppingCartSql,
-                new object[] {shoppingCart.Id, shoppingCart.Items},
+                items,
                 tx).ConfigureAwait(false);
         }
     }
