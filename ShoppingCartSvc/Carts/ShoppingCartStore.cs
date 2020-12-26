@@ -17,7 +17,6 @@
 
 using Dapper;
 using Npgsql;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,9 +40,9 @@ where ""ShoppingCart"".""UserId"" = @UserId";
             var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCart>(readItemsSql,
                 (id, shoppingCartItem, money) =>
                 {
-                    Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", id, shoppingCartItem?.ProductCatalogId,
-                        shoppingCartItem?.ProductName, shoppingCartItem?.ProductDescription, 
-                        money?.Amount, money?.Currency);
+                    // Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", id, shoppingCartItem?.ProductCatalogId,
+                    //     shoppingCartItem?.ProductName, shoppingCartItem?.ProductDescription, 
+                    //     money?.Amount, money?.Currency);
 
                     shoppingCart ??= new ShoppingCart(id, new ShoppingCartItem[]{});
                     if (shoppingCartItem == null)
@@ -53,7 +52,7 @@ where ""ShoppingCart"".""UserId"" = @UserId";
 
                     if (money == null)
                     {
-                        Console.WriteLine("Money is null!");
+                        // Console.WriteLine("Money is null!");
                         shoppingCartItem.Price ??= new Money("none", 9m);
                         return shoppingCart;
                     }
@@ -88,8 +87,8 @@ values
             foreach (var item in shoppingCart.Items)
             {
                 item.Price ??= new Money("none", 1m);
-                Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId,
-                    item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency);
+                // Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId,
+                //     item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency);
             }
 
             var items = shoppingCart.Items.Select(item => new

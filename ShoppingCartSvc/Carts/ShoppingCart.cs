@@ -33,7 +33,7 @@ namespace ShoppingCartSvc.Carts
         {
             if (items == null)
                 return;
-            
+
             Id = id;
             foreach (var item in items)
                 _items.Add(item);
@@ -50,7 +50,7 @@ namespace ShoppingCartSvc.Carts
                 if (eventStore == null)
                     continue;
                 if (added)
-                    eventStore.Raise("ShoppingCartItemAdded", new { Id = Id, item });
+                    eventStore.Raise("ShoppingCartItemAdded", new { Id, item });
             }
         }
 
@@ -61,10 +61,10 @@ namespace ShoppingCartSvc.Carts
 
             if (eventStore == null)
                 return;
-            
+
             var count = _items.RemoveWhere(i => productCatalogIds.Contains(i.ProductCatalogId));
             foreach (var item in productCatalogIds)
-                eventStore.Raise("ShoppingCartItemRemoved", new { Id = Id, item });
+                eventStore.Raise("ShoppingCartItemRemoved", new { Id, item });
         }
     }
 }

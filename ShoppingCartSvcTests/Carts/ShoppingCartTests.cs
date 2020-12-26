@@ -45,7 +45,7 @@ namespace ShoppingCartSvcTests.Carts
             var items = new[] { item };
 
             // _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item }));
-            _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>()));
+            _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0L);
 
             var cart = new ShoppingCart(234, new ShoppingCartItem[0]);
             cart.AddItems(items, _mockEventStore.Object);
@@ -59,7 +59,7 @@ namespace ShoppingCartSvcTests.Carts
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123.45m));
             var items = new[] { item };
             var cart = new ShoppingCart(234, items);
-            _mockEventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>()));
+            _mockEventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>())).Returns(0L);
 
             cart.RemoveItems(new[] { 12 }, _mockEventStore.Object);
 
