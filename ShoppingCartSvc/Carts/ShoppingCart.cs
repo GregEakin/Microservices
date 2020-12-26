@@ -27,12 +27,11 @@ namespace ShoppingCartSvc.Carts
             if (shoppingCartItems == null)
                 return;
 
-            if (eventStore == null)
-                return;
-            
             foreach (var item in shoppingCartItems)
             {
                 var added = _items.Add(item);
+                if (eventStore == null)
+                    continue;
                 if (added)
                     eventStore.Raise("ShoppingCartItemAdded", new { Id = Id, item });
             }

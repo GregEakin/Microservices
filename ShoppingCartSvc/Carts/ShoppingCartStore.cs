@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Dapper;
 using Npgsql;
 using System.Threading.Tasks;
@@ -20,39 +21,43 @@ namespace ShoppingCartSvc.Carts
             @"Host=microservices_cartdb_1;Port=5432;Database=cartapp;Username=cartapp;Password=cartpw";
 
         private const string readItemsSql =
-            @"select ""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
-from ""public"".""ShoppingCart"", ""public"".""ShoppingCartItems""
-where ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
-and ""ShoppingCart"".""UserId"" = @UserId";
+            @"select ""ShoppingCart"".id, ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
+from ""ShoppingCart"" left join ""ShoppingCartItems"" on ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
+where ""ShoppingCart"".""UserId"" = @UserId";
 
         public async Task<ShoppingCart> Get(int userId)
         {
             await using var conn = new NpgsqlConnection(connectionString);
             await conn.OpenAsync();
-            var id = -1;
-            var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCartItem>(readItemsSql,
-                (cartId, shoppingCartItem, money) =>
+            ShoppingCart shoppingCart = null;
+            var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCart>(readItemsSql,
+                (id, shoppingCartItem, money) =>
                 {
-                    Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", cartId, shoppingCartItem.ProductCatalogId,
-                        shoppingCartItem.ProductName, shoppingCartItem.ProductDescription, 
+                    Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", id, shoppingCartItem?.ProductCatalogId,
+                        shoppingCartItem?.ProductName, shoppingCartItem?.ProductDescription, 
                         money?.Amount, money?.Currency);
 
-                    id = cartId;
+                    shoppingCart ??= new ShoppingCart(id, new ShoppingCartItem[]{});
+                    if (shoppingCartItem == null)
+                        return shoppingCart;
+                    
+                    shoppingCart.AddItems(new[] {shoppingCartItem}, null);
+
                     if (money == null)
                     {
                         Console.WriteLine("Money is null!");
                         shoppingCartItem.Price ??= new Money("none", 9);
-                        return shoppingCartItem;
+                        return shoppingCart;
                     }
 
                     shoppingCartItem.Price ??= new Money();
                     shoppingCartItem.Price.Amount = money.Amount;
                     shoppingCartItem.Price.Currency = money.Currency;
-                    return shoppingCartItem;
+                    return shoppingCart;
                 },
                 new { UserId = userId },
                 splitOn: "ProductCatalogId,Currency");
-            return new ShoppingCart(id, items);
+            return items.FirstOrDefault();
         }
 
         private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" WHERE ""ShoppingCartId"" = @Id";
