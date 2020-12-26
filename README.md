@@ -1,14 +1,14 @@
 # Microservices in .NET Core
-Sample impelementation from the book [*Microservices in .NET Core*](https://www.manning.com/books/microservices-in-net-core) 
+Sample implementation from the book [*Microservices in .NET Core*](https://www.manning.com/books/microservices-in-net-core) 
 by Christian Horsdal Gammelgaard, [ISBN 9781617293375](https://en.wikipedia.org/wiki/Special:BookSources?isbn=9781617293375).
 
 Running on a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 
 with a [64-bit operating system](https://ubuntu.com/download/raspberry-pi) 
-in a [Docker instalation](https://www.docker.com/).
+in a [Docker installation](https://www.docker.com/).
 
 ## How to build a micro services swarm
 1. Clone the repository
-1. cd Misrosovers
+1. cd Microservices
 1. docker-compose build
 1. docker-compose up -d
 1. docker-compose ps
@@ -19,9 +19,9 @@ in a [Docker instalation](https://www.docker.com/).
 1. docker-compose down --volumes
 1. docker-compose push
 
-## Current Shoping Cart Features
+## Current Shopping Cart Features
 * [REST ASP.NET](https://dotnet.microsoft.com/apps/aspnet) interface
-* [Persistance storage](https://github.com/StackExchange/Dapper) - Database
+* [Persistence storage](https://github.com/StackExchange/Dapper) - Database
 * Get cart contents
 * Add products to the cart
 * Empty the cart
@@ -36,9 +36,9 @@ in a [Docker instalation](https://www.docker.com/).
 ## Additional Shopping Cart Features
 * Get product prices
 * Inventory Events
-* Cusomters
-* Reseverations
-* Permotions
+* Customers
+* Reservations
+* Premotions
 * Save for Latter
 * Suggestions
 * Send reminders
@@ -49,13 +49,13 @@ in a [Docker instalation](https://www.docker.com/).
 * Inventory
 * Suppliers
 * Shippers
-* Promotons
+* Premotions
 * Accounting
 * Security
 * Performance
 * Feedback
-* Whish List
+* Wish List
 * Collections
 * Advertising
-* Broswing History
+* Browsing History
 * Help
