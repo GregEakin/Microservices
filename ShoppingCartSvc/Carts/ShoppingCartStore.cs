@@ -4,14 +4,11 @@
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Dapper;
 using Npgsql;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ShoppingCartSvc.Carts
 {
@@ -98,6 +95,8 @@ values
                 addAllForShoppingCartSql,
                 items,
                 tx).ConfigureAwait(false);
+            
+            await tx.CommitAsync();
         }
     }
 }
