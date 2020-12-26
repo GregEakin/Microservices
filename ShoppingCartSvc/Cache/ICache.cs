@@ -22,6 +22,6 @@ namespace ShoppingCartSvc.Cache
     public interface ICache
     {
         void Add(string key, TimeSpan ttl, string value);
-        object Get(string productsResource);
+        string Get(string productsResource);
     }
 }

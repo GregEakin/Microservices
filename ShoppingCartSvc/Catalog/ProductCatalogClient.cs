@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -51,39 +50,46 @@ namespace ShoppingCartSvc.Catalog
 
         public async Task<IEnumerable<ShoppingCartItem>> GetItemsFromCatalogService(int[] productCatalogIds)
         {
-            var response = await RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
-            return await ConvertToShoppingCartItems(response).ConfigureAwait(false);
+            var payload = await RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
+            return ConvertToShoppingCartItems(payload);
         }
 
-        public async Task<HttpResponseMessage> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
+        public async Task<string> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
         {
-            var productsResource = string.Format(getProductPathTemplate, string.Join("&id=", productCatalogIds));
-            if (_cache.Get(productsResource) is HttpResponseMessage response)
-                return response;
+            var requestUri = string.Format(getProductPathTemplate, string.Join("&id=", productCatalogIds));
+            var payload = _cache.Get(requestUri);
+            if (!string.IsNullOrEmpty(payload))
+                return payload;
 
-            using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
-            var response1 = await httpClient.GetAsync(productsResource).ConfigureAwait(false);
-            var maxAge = response1.Headers.CacheControl?.MaxAge;
-            var payload = await response1.Content.ReadAsStringAsync().ConfigureAwait(false);
-            AddToCache(productsResource, maxAge, payload);
-            return response1;
+            payload = await SendRequest(requestUri);
+            return payload;
         }
 
-        public async Task<IEnumerable<ShoppingCartItem>> ConvertToShoppingCartItems(HttpResponseMessage response)
+        public IEnumerable<ShoppingCartItem> ConvertToShoppingCartItems(string payload)
         {
-            response.EnsureSuccessStatusCode();
-            var readAsStringAsync = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(readAsStringAsync, options);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(payload, options);
             if (products == null)
                 throw new NullReferenceException("JsonSerializer.Deserialize() returned null.");
 
-            return products.Select(p => new ShoppingCartItem(
-                  int.Parse(p.ProductId),
-                  p.ProductName,
-                  p.ProductDescription,
-                  p.Price
-              ));
+            var items = products.Select(p => new ShoppingCartItem(
+                int.Parse(p.ProductId),
+                p.ProductName,
+                p.ProductDescription,
+                p.Price
+            ));
+            return items;
+        }
+
+        private async Task<string> SendRequest(string requestUri)
+        {
+            using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
+            var response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            var maxAge = response.Headers.CacheControl?.MaxAge;
+            var payload = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            AddToCache(requestUri, maxAge, payload);
+            return payload;
         }
 
         public void AddToCache(string resource, TimeSpan? maxAge, string response)

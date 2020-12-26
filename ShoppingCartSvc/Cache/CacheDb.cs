@@ -12,19 +12,23 @@ namespace ShoppingCartSvc.Cache
 {
     public class CacheDb : ICache
     {
-        private static readonly IDictionary<string, Tuple<DateTimeOffset, string>> _cache = new ConcurrentDictionary<string, Tuple<DateTimeOffset, string>>();
+        private readonly IDictionary<string, Tuple<DateTimeOffset, string>> _cache = new ConcurrentDictionary<string, Tuple<DateTimeOffset, string>>();
 
         public void Add(string key, TimeSpan ttl, string value)
         {
-            _cache[key] = Tuple.Create(DateTimeOffset.UtcNow.Add(ttl), value);
+            var dateTimeOffset = DateTimeOffset.UtcNow.Add(ttl);
+            _cache[key] = Tuple.Create(dateTimeOffset, value);
         }
 
-        public object Get(string productsResource)
+        public string Get(string productsResource)
         {
             var tryGetValue = _cache.TryGetValue(productsResource, out var value);
-            if (tryGetValue && value.Item1 > DateTimeOffset.UtcNow)
-                return value;
+            if (!tryGetValue) 
+                return null;
             
+            if (value.Item1 >= DateTimeOffset.UtcNow)
+                return value.Item2;
+
             _cache.Remove(productsResource);
             return null;
         }

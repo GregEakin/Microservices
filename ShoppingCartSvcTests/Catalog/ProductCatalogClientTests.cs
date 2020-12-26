@@ -27,6 +27,63 @@ namespace ShoppingCartSvcTests.Catalog
         }
 
         [Test]
+        public async Task GetItemsFromCatalogService_CacheHitTest()
+        {
+            var cachedResponse = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]";
+            _mockCache.Setup(t => t.Get("Products/products?id=0")).Returns(cachedResponse);
+
+            var client = new ProductCatalogClient(_mockCache.Object);
+            var response = await client.GetItemsFromCatalogService(new[] { 0 });
+            var product = response.Single();
+            Assert.AreEqual(0, product.ProductCatalogId);
+            Assert.AreEqual("foo0", product.ProductName);
+            Assert.AreEqual("bar", product.ProductDescription);
+            Assert.IsNotNull(product.Price);
+            Assert.IsFalse(string.IsNullOrEmpty(product.Price.Currency));
+        }
+
+        [Test]
+        public async Task RequestProductFromProductCatalog_CacheHitTest()
+        {
+            var cachedResponse = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]";
+            _mockCache.Setup(t => t.Get("Products/products?id=0")).Returns(cachedResponse);
+
+            var client = new ProductCatalogClient(_mockCache.Object);
+            var response = await client.RequestProductFromProductCatalog(new[] { 0 });
+            Assert.AreEqual(cachedResponse, response);
+        }
+
+        // [Test]
+        // public void ConvertToShoppingCartItems_BadResultTest() // get a null out of Deserialize 
+        // {
+        //     var client = new ProductCatalogClient(null);
+        //     using var response = new HttpResponseMessage(HttpStatusCode.NotFound);
+        //     Assert.ThrowsAsync<HttpRequestException>(async () => await client.ConvertToShoppingCartItems(response));
+        // }
+
+        [Test]
+        public void ConvertToShoppingCartItems_NoResultTest()
+        {
+            var client = new ProductCatalogClient(null);
+            var result = client.ConvertToShoppingCartItems("[]");
+            Assert.IsFalse(result.Any());
+        }
+
+        [Test]
+        public void ConvertToShoppingCartItems_SingleTest()
+        {
+            var client = new ProductCatalogClient(null);
+            var response = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]";
+            var result = client.ConvertToShoppingCartItems(response);
+            var product = result.Single();
+            Assert.AreEqual(0, product.ProductCatalogId);
+            Assert.AreEqual("foo0", product.ProductName);
+            Assert.AreEqual("bar", product.ProductDescription);
+            Assert.IsNotNull(product.Price);
+            Assert.IsFalse(string.IsNullOrEmpty(product.Price.Currency));
+        }
+
+        [Test]
         public void AddToCache_NoCacheControlTest()
         {
             var resource = "Products/products?id=0";
@@ -46,59 +103,6 @@ namespace ShoppingCartSvcTests.Catalog
 
             var client = new ProductCatalogClient(_mockCache.Object);
             client.AddToCache(resource, maxAge, payload);
-        }
-
-        [Test]
-        public async Task RequestProductFromProductCatalog_CacheHitTest()
-        {
-            using var cachedResponse = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(
-                    "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]")
-            };
-            _mockCache.Setup(t => t.Get("Products/products?id=0")).Returns(cachedResponse);
-
-            var client = new ProductCatalogClient(_mockCache.Object);
-            var response = await client.RequestProductFromProductCatalog(new[] { 0 });
-            Assert.AreSame(cachedResponse, response);
-        }
-
-        [Test]
-        public void ConvertToShoppingCartItems_BadResultTest()
-        {
-            var client = new ProductCatalogClient(null);
-            using var response = new HttpResponseMessage(HttpStatusCode.NotFound);
-            Assert.ThrowsAsync<HttpRequestException>(async () => await client.ConvertToShoppingCartItems(response));
-        }
-
-        [Test]
-        public async Task ConvertToShoppingCartItems_NoResultTest()
-        {
-            var client = new ProductCatalogClient(null);
-            using var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent("[]")
-            };
-            var result = await client.ConvertToShoppingCartItems(response);
-            Assert.IsFalse(result.Any());
-        }
-
-        [Test]
-        public async Task ConvertToShoppingCartItems_SingleTest()
-        {
-            var client = new ProductCatalogClient(null);
-            using var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(
-                    "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]")
-            };
-            var result = await client.ConvertToShoppingCartItems(response);
-            var product = result.Single();
-            Assert.AreEqual(0, product.ProductCatalogId);
-            Assert.AreEqual("foo0", product.ProductName);
-            Assert.AreEqual("bar", product.ProductDescription);
-            Assert.IsNotNull(product.Price);
-            Assert.IsFalse(string.IsNullOrEmpty(product.Price.Currency));
         }
     }
 }
