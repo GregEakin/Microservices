@@ -21,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ShoppingCartSvc.Cache;
 using ShoppingCartSvc.Carts;
 using ShoppingCartSvc.Catalog;
 using ShoppingCartSvc.EventFeed;
@@ -42,6 +43,7 @@ namespace ShoppingCartSvc
             services.AddSingleton<IShoppingCartStore, ShoppingCartStore>();
             services.AddSingleton<IProductCatalogClient, ProductCatalogClient>();
             services.AddSingleton<IEventStore, EventStore>();
+            services.AddSingleton<ICache, CacheDb>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>

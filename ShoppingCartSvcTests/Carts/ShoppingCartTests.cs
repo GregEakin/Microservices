@@ -35,7 +35,7 @@ namespace ShoppingCartSvcTests.Carts
         {
             // var mockShoppingCartStore = new Mock<IShoppingCartStore>();
             // services.AddSingleton<IProductCatalogClient, ProductCatalogClient>();
-            _mockEventStore = new Mock<IEventStore>();
+            _mockEventStore = new Mock<IEventStore>(MockBehavior.Strict);
         }
 
         [Test]
@@ -44,17 +44,13 @@ namespace ShoppingCartSvcTests.Carts
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123.456m));
             var items = new[] { item };
 
-            // mockEventStore.Setup(t =>
-            //     t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item })
-            // );
-
+            // _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item }));
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>()));
 
             var cart = new ShoppingCart(234, new ShoppingCartItem[0]);
             cart.AddItems(items, _mockEventStore.Object);
 
             Assert.AreEqual(items, cart.Items);
-            _mockEventStore.VerifyAll();
         }
 
         [Test]
@@ -68,11 +64,10 @@ namespace ShoppingCartSvcTests.Carts
             cart.RemoveItems(new[] { 12 }, _mockEventStore.Object);
 
             Assert.IsFalse(cart.Items.Any());
-            _mockEventStore.VerifyAll();
         }
 
         [Test]
-        public void Test1()
+        public void Deserialize3_ProductCatalogProductTest()
         {
             var msg = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}},"
                       + "{\"productId\":\"2\",\"productName\":\"foo2\",\"productDescription\":\"bar\",\"price\":{}},"
@@ -83,11 +78,12 @@ namespace ShoppingCartSvcTests.Carts
             Assert.IsNotNull(products);
             Assert.AreEqual(3, products.Count);
             Assert.AreEqual("0", products[0].ProductId);
-            Assert.Pass();
+            Assert.AreEqual("2", products[1].ProductId);
+            Assert.AreEqual("3", products[2].ProductId);
         }
 
         [Test]
-        public void Test2()
+        public void Deserialize_ProductCatalogProductTest()
         {
             var msg = "{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}";
             var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
@@ -95,11 +91,14 @@ namespace ShoppingCartSvcTests.Carts
 
             Assert.IsNotNull(product);
             Assert.AreEqual("0", product.ProductId);
-            Assert.Pass();
+            Assert.AreEqual("foo0", product.ProductName);
+            Assert.AreEqual("bar", product.ProductDescription);
+            Assert.IsNotNull(product.Price);
+            Assert.IsTrue(string.IsNullOrEmpty(product.Price.Currency));
         }
 
         [Test]
-        public void Test3()
+        public void DeserializeShort_ProductCatalogProductTest()
         {
             var msg = "{\"productId\":\"0\"}";
             var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
@@ -107,7 +106,9 @@ namespace ShoppingCartSvcTests.Carts
 
             Assert.IsNotNull(product);
             Assert.AreEqual("0", product.ProductId);
-            Assert.Pass();
+            Assert.IsTrue(string.IsNullOrEmpty(product.ProductName));
+            Assert.IsTrue(string.IsNullOrEmpty(product.ProductDescription));
+            Assert.IsNull(product.Price);
         }
     }
 }

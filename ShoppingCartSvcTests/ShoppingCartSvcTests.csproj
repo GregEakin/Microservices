@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ShoppingCartSvc\ShoppingCartSvc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Catalog\" />
+  </ItemGroup>
+
 </Project>

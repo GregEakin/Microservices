@@ -30,15 +30,15 @@ namespace ProductCatalogSvc.Products
         }
 
         [JsonPropertyName("productId")]
-        public string ProductId { get; private set; }
-        
+        public string ProductId { get; }
+
         [JsonPropertyName("productName")]
-        public string ProductName { get; private set; }
-        
+        public string ProductName { get; }
+
         [JsonPropertyName("productDescription")]
-        public string ProductDescription { get; private set; }
+        public string ProductDescription { get; }
 
         [JsonPropertyName("price")]
-        public Money Price { get; private set; }
+        public Money Price { get; }
     }
 }

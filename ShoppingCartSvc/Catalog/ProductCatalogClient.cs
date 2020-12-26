@@ -15,11 +15,13 @@
 // FILE:  ProductCatalogProduct.cs
 // AUTHOR:  Greg Eakin
 
+using ShoppingCartSvc.Cache;
 using ShoppingCartSvc.Carts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -32,34 +34,50 @@ namespace ShoppingCartSvc.Catalog
         //       3,
         //       attempt => TimeSpan.FromMilliseconds(100 * Math.Pow(2, attempt)), (ex, _) => Console.WriteLine(ex.ToString()));
 
-
-        // http://192.168.40.140:8086/api/Products/items?id=2&id=3
+        // http://microservices_productsvc_1/api/Products/items?id=2&id=3
         private const string productCatalogBaseUrl = @"http://microservices_productsvc_1/api/";
         private const string getProductPathTemplate = "Products/products?id={0}";
+
+        private readonly ICache _cache;
+
+        public ProductCatalogClient(ICache cache)
+        {
+            _cache = cache;
+        }
 
         public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>
             // exponentialRetryPolicy.ExecuteAsync(async () => await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false));
             await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false);
 
-        private async Task<IEnumerable<ShoppingCartItem>> GetItemsFromCatalogService(int[] productCatalogIds)
+        public async Task<IEnumerable<ShoppingCartItem>> GetItemsFromCatalogService(int[] productCatalogIds)
         {
             var response = await RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
             return await ConvertToShoppingCartItems(response).ConfigureAwait(false);
         }
 
-        private static async Task<HttpResponseMessage> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
+        public async Task<HttpResponseMessage> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
         {
             var productsResource = string.Format(getProductPathTemplate, string.Join("&id=", productCatalogIds));
+            if (_cache.Get(productsResource) is HttpResponseMessage response)
+                return response;
+
             using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
-            return await httpClient.GetAsync(productsResource).ConfigureAwait(false);
+            var response1 = await httpClient.GetAsync(productsResource).ConfigureAwait(false);
+            var maxAge = response1.Headers.CacheControl?.MaxAge;
+            var payload = await response1.Content.ReadAsStringAsync().ConfigureAwait(false);
+            AddToCache(productsResource, maxAge, payload);
+            return response1;
         }
 
-        private static async Task<IEnumerable<ShoppingCartItem>> ConvertToShoppingCartItems(HttpResponseMessage response)
+        public async Task<IEnumerable<ShoppingCartItem>> ConvertToShoppingCartItems(HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
             var readAsStringAsync = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
             var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(readAsStringAsync, options);
+            if (products == null)
+                throw new NullReferenceException("JsonSerializer.Deserialize() returned null.");
+
             return products.Select(p => new ShoppingCartItem(
                   int.Parse(p.ProductId),
                   p.ProductName,
@@ -68,22 +86,12 @@ namespace ShoppingCartSvc.Catalog
               ));
         }
 
-        public record ProductCatalogProduct3(string ProductId, string ProductName, string ProductDescription, Money Price);
-    }
-
-    public class ProductCatalogProduct
-    {
-        public ProductCatalogProduct(string productId, string productName, string productDescription, Money price)
+        public void AddToCache(string resource, TimeSpan? maxAge, string response)
         {
-            ProductId = productId;
-            ProductName = productName;
-            ProductDescription = productDescription;
-            Price = price;
-        }
+            if (!maxAge.HasValue)
+                return;
 
-        public string ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
-        public Money Price { get; set; }
+            _cache.Add(resource, maxAge.Value, response);
+        }
     }
 }

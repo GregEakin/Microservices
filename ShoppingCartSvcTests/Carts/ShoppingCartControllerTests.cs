@@ -32,24 +32,25 @@ namespace ShoppingCartSvcTests.Carts
 {
     public class CartControllerTests
     {
+        private Mock<ILogger<ShoppingCartController>> _logger;
+        private Mock<IShoppingCartStore> _shoppingCartStore;
+        private Mock<IProductCatalogClient> _productCatalog;
+        private Mock<IEventStore> _eventStore;
+
         [SetUp]
         public void Setup()
         {
-            // services.AddSingleton<IShoppingCartStore, ShoppingCartStore>();
-            // services.AddSingleton<IProductCatalogClient, ProductCatalogClient>();
-            // services.AddSingleton<IEventStore, EventStore>();
+            _logger = new Mock<ILogger<ShoppingCartController>>(MockBehavior.Strict);
+            _shoppingCartStore = new Mock<IShoppingCartStore>(MockBehavior.Strict);
+            _productCatalog = new Mock<IProductCatalogClient>(MockBehavior.Strict);
+            _eventStore = new Mock<IEventStore>(MockBehavior.Strict);
         }
 
         [Test]
         public async Task GetCartTest()
         {
-            var logger = new Mock<ILogger<ShoppingCartController>>();
-            var shoppingCartStore = new Mock<IShoppingCartStore>();
-            var productCatalog = new Mock<IProductCatalogClient>();
-            var eventStore = new Mock<IEventStore>();
-
             var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
+            _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
             // request.Setup(x => x.Scheme).Returns("http");
@@ -60,15 +61,13 @@ namespace ShoppingCartSvcTests.Carts
 
             var controllerContext = new ControllerContext() { HttpContext = httpContext };
 
-            var controller = new ShoppingCartController(logger.Object, shoppingCartStore.Object, productCatalog.Object, eventStore.Object)
+            var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
             };
 
             var result = await controller.Get(124);
             Assert.AreSame(shoppingCart, result.Value);
-            shoppingCartStore.VerifyAll();
-            request.VerifyAll();
         }
 
         [Test]
@@ -77,14 +76,14 @@ namespace ShoppingCartSvcTests.Carts
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 4532.15m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
-            var logger = new Mock<ILogger<ShoppingCartController>>();
-            var shoppingCartStore = new Mock<IShoppingCartStore>();
-            var productCatalog = new Mock<IProductCatalogClient>();
-            productCatalog.Setup(t => t.GetShoppingCartItems(new[] { 12 })).Returns(items);
-            var eventStore = new Mock<IEventStore>();
+            //_eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { Id = 124, item }));
+            _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>()));
+
+            _productCatalog.Setup(t => t.GetShoppingCartItems(new[] { 12 })).Returns(items);
 
             var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
+            _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
+            _shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>())).Returns(Task.CompletedTask);
 
             var request = new Mock<HttpRequest>();
             // request.Setup(x => x.Scheme).Returns("http");
@@ -95,32 +94,27 @@ namespace ShoppingCartSvcTests.Carts
 
             var controllerContext = new ControllerContext() { HttpContext = httpContext };
 
-            var controller = new ShoppingCartController(logger.Object, shoppingCartStore.Object, productCatalog.Object, eventStore.Object)
+            var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
             };
 
             var response = await controller.Post(124, new[] { 12 });
             Assert.AreEqual(200, (response as StatusCodeResult)?.StatusCode);
-            shoppingCartStore.VerifyAll();
-            productCatalog.VerifyAll();
-            request.VerifyAll();
         }
 
         [Test]
         public async Task DeleteCartItemTest()
         {
+            //_eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", new { Id = 124, item = 12}));
+            _eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>()));
+
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987.12m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
-            var logger = new Mock<ILogger<ShoppingCartController>>();
-            var shoppingCartStore = new Mock<IShoppingCartStore>();
-            var productCatalog = new Mock<IProductCatalogClient>();
-            var eventStore = new Mock<IEventStore>();
-
             var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
-            shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
-            shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>()));
+            _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
+            _shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>())).Returns(Task.CompletedTask);
 
             var request = new Mock<HttpRequest>();
             // request.Setup(x => x.Scheme).Returns("http");
@@ -131,15 +125,13 @@ namespace ShoppingCartSvcTests.Carts
 
             var controllerContext = new ControllerContext() { HttpContext = httpContext };
 
-            var controller = new ShoppingCartController(logger.Object, shoppingCartStore.Object, productCatalog.Object, eventStore.Object)
+            var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
             };
 
             await controller.Delete(124, new[] { 12 });
             Assert.IsFalse(shoppingCart.Items.Any());
-            shoppingCartStore.VerifyAll();
-            request.VerifyAll();
         }
     }
 }
