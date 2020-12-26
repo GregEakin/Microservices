@@ -1,4 +1,15 @@
-﻿// Copyright © 2020-2020. All Rights Reserved.
+﻿// Copyright 2020 Greg Eakin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at:
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 // 
 // SUBSYSTEM: ShoppingCartSvcTests
 // FILE:  EventStoreTests.cs
@@ -22,7 +33,7 @@ namespace ShoppingCartSvcTests.EventFeed
             var event3 = eventStore.Raise("Event3", null);
 
             var events = eventStore.GetEvents(event2, event2).ToArray();
-            Assert.AreEqual(1, events.Count());
+            Assert.AreEqual(1, events.Length);
             Assert.AreEqual(event2, events[0].SequenceNumber);
             Assert.AreEqual("Event2", events[0].Name);
         }

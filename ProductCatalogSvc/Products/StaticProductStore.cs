@@ -16,7 +16,6 @@
 // AUTHOR:  Greg Eakin
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ProductCatalogSvc.Products
 {
@@ -24,7 +23,15 @@ namespace ProductCatalogSvc.Products
     {
         public IEnumerable<ProductCatalogProduct> GetProductsByIds(IEnumerable<int> productIds)
         {
-            return productIds.Select(id => new ProductCatalogProduct(id, "foo" + id, "bar", new Money()));
+            const int maxProductId = 200;
+            
+            foreach (var id in productIds)
+            {
+                if (id < 0 || id >= maxProductId)
+                    continue;
+                
+                yield return new ProductCatalogProduct(id, "foo" + id, "bar", new Money());
+            }
         }
     }
 }

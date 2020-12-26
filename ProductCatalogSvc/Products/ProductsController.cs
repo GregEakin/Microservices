@@ -17,12 +17,11 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProductCatalogSvc.Products;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ProductCatalogSvc.Controllers
+namespace ProductCatalogSvc.Products
 {
     [Route("api/[controller]")]
     [ApiController]
