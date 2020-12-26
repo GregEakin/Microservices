@@ -9,9 +9,9 @@ namespace ShoppingCartSvc.Carts
     public class Money
     {
         public string Currency { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         public Money() { }
-        public Money(string currency, int amount)
+        public Money(string currency, decimal amount)
         {
             Currency = currency;
             Amount = amount;

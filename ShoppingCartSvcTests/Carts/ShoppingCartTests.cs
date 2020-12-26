@@ -30,7 +30,7 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public void AddItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123.456m));
             var items = new[] { item };
 
             // mockEventStore.Setup(t =>
@@ -49,7 +49,7 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public void RemoveItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123.45m));
             var items = new[] { item };
             var cart = new ShoppingCart(234, items);
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>()));

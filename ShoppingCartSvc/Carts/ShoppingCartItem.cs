@@ -24,7 +24,7 @@ namespace ShoppingCartSvc.Carts
             ProductCatalogId = productCatalogId;
             ProductName = productName;
             ProductDescription = productDescription;
-            Price = price ?? new Money("none", 7);
+            Price = price ?? new Money("none", 7m);
             if (string.IsNullOrEmpty(Price.Currency))
                 Price.Currency = "Ukn";
         }

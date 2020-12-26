@@ -43,7 +43,7 @@ where ""ShoppingCart"".""UserId"" = @UserId";
                     if (money == null)
                     {
                         Console.WriteLine("Money is null!");
-                        shoppingCartItem.Price ??= new Money("none", 9);
+                        shoppingCartItem.Price ??= new Money("none", 9m);
                         return shoppingCart;
                     }
 
@@ -68,7 +68,7 @@ values
         {
             await using var conn = new NpgsqlConnection(connectionString);
             await conn.OpenAsync();
-            await using var tx = conn.BeginTransaction();
+            await using var tx = await conn.BeginTransactionAsync();
             await conn.ExecuteAsync(
                 deleteAllForShoppingCartSql,
                 new { Id = shoppingCart.Id },
@@ -76,7 +76,7 @@ values
 
             foreach (var item in shoppingCart.Items)
             {
-                item.Price ??= new Money("none", 1);
+                item.Price ??= new Money("none", 1m);
                 Console.WriteLine("Item: {0}, {1}, {2}, {3}, {4}, {5}", shoppingCart.Id, item.ProductCatalogId,
                     item.ProductName, item.ProductDescription, item.Price.Amount, item.Price.Currency);
             }

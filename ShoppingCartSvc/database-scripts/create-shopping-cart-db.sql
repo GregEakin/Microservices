@@ -24,7 +24,7 @@ create table "ShoppingCartItems"
 	"ProductCatalogId" int not null,
 	"ProductName" varchar(100) not null,
 	"ProductDescription" varchar(500),
-	"Amount" integer not null,
+	"Amount" money not null,
 	"Currency" varchar(5) not null
 );
 

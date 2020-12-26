@@ -63,7 +63,7 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public async Task AddCartItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 4532));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 4532.15m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
             var logger = new Mock<ILogger<ShoppingCartController>>();
@@ -99,7 +99,7 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public async Task DeleteCartItemTest()
         {
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987));
+            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987.12m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
             var logger = new Mock<ILogger<ShoppingCartController>>();
