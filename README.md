@@ -1,18 +1,18 @@
 # Microservices in .NET Core
 Sample impelementation from the book [*Microservices in .NET Core*](https://www.manning.com/books/microservices-in-net-core) 
-by Christian Horsdal Gammelgaard, ISBN 9781617293375.
+by Christian Horsdal Gammelgaard, [ISBN 9781617293375](https://en.wikipedia.org/wiki/Special:BookSources?isbn=9781617293375).
 
-Running a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 
+Running on a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 
 with a [64-bit operating system](https://ubuntu.com/download/raspberry-pi) 
-under a [Docker swarm](https://www.docker.com/).
+in a [Docker instalation](https://www.docker.com/).
 
 ## How to build a micro services swarm
 1. Clone the repository
 1. cd Misrosovers
-1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
 1. docker-compose build
 1. docker-compose up -d
 1. docker-compose ps
+1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
 1. ProductCatalogSvc: http://host:8086/swagger/index.html
 1. ShoppingCartSvc: http://host:8087/swagger/index.html
 1. Database: [PostgreSQL](https://www.postgresql.org/) host, port: 5432, user: cartapp, pass: cartpw
@@ -41,6 +41,7 @@ under a [Docker swarm](https://www.docker.com/).
 * Permotions
 * Save for Latter
 * Suggestions
+* Send reminders
 
 ## Additional Services
 * Event Logging
