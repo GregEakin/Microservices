@@ -7,17 +7,25 @@ with a [64-bit operating system](https://ubuntu.com/download/raspberry-pi)
 in a [Docker installation](https://www.docker.com/).
 
 ## How to build a micro services swarm
+1. Start with a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
+1. Install a [64-bit operating system](https://ubuntu.com/download/raspberry-pi)
+1. Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
+	1. Select *arm64* in step three
+1. Install [Docker-Compose](https://docs.docker.com/compose/install/)
+	1. Use the Alternative Install Options
+	1. `pip3 install docker-compose`
 1. Clone the repository
-1. cd Microservices
-1. docker-compose build
-1. docker-compose up -d
-1. docker-compose ps
+	1. `git clone https://github.com/GregEakin/Microservices.git`
+1. `cd Microservices`
+1. `docker-compose build`
+1. `docker-compose up -d`
+1. `docker-compose ps`
 1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
 1. ProductCatalogSvc: http://host:8086/swagger/index.html
 1. ShoppingCartSvc: http://host:8087/swagger/index.html
 1. Database: [PostgreSQL](https://www.postgresql.org/) host, port: 5432, user: cartapp, pass: cartpw
-1. docker-compose down --volumes
-1. docker-compose push
+1. `docker-compose down --volumes`
+1. `docker-compose push`
 
 ## Current Shopping Cart Features
 * [REST ASP.NET](https://dotnet.microsoft.com/apps/aspnet) interface
