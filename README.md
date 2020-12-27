@@ -1,12 +1,21 @@
 # Microservices in .NET Core
-Sample implementation from the book [*Microservices in .NET Core*](https://www.manning.com/books/microservices-in-net-core) 
+Sample shopping cart implementation from the book [*Microservices in .NET Core*](https://www.manning.com/books/microservices-in-net-core) 
 by Christian Horsdal Gammelgaard, [ISBN 9781617293375](https://en.wikipedia.org/wiki/Special:BookSources?isbn=9781617293375).
 
-Running on a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 
+Running [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+on a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 
 with a [64-bit operating system](https://ubuntu.com/download/raspberry-pi) 
-in a [Docker installation](https://www.docker.com/).
+inside a [Docker](https://www.docker.com/) container.
 
-## How to run the micro services swarm
+## Debug the Unit Tests
+1. Clone the repository into an [IDE](https://visualstudio.microsoft.com/)
+1. Build the project: *debug configuration*
+1. Verify 22 unit tests pass
+1. Debug the unit tests
+	1. Breakpoint: *ShoppingCartController.cs*, *line 55*
+	1. Debug: *ShoppingCartControllerTest.cs*, *AddCartItemTest()*
+
+## Deploy the Microservices
 1. Start with a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
 1. Install a [64-bit operating system](https://ubuntu.com/download/raspberry-pi)
 1. Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
@@ -15,13 +24,15 @@ in a [Docker installation](https://www.docker.com/).
 	1. Use the **Alternative Install Options**
 	1. `sudo apt install python3-pip`
 	1. `pip3 install docker-compose`
+	1. `export PATH="$HOME/.local/bin:$PATH"`
 1. Clone the repository
+	1. `sudo apt install git`
 	1. `git clone https://github.com/GregEakin/Microservices.git`
 1. `cd Microservices`
 1. `docker-compose build`
 1. `docker-compose up -d`
 1. `docker-compose ps`
-1. Database: [PostgreSQL](https://www.postgresql.org/) host: rpi, port: 5432, user: cartapp, pass: cartpw
+1. Database [PostgreSQL](https://www.postgresql.org/): host rpi, port 5432, user cartapp, pass cartpw
 	1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
 1. Review the API: [Postman](https://www.postman.com/)
 	1. ProductCatalogSvc: *http://rpi:8086/swagger/index.html*
@@ -50,12 +61,12 @@ in a [Docker installation](https://www.docker.com/).
 * Unit Tests
 
 ## Additional Shopping Cart Features Needed
-* Product Copy and Pitctures
+* Product Copy and Pictures
 * Inventory Events
 * Customers
 * Reservations
-* Premotions
-* Save for Latter
+* Promotions
+* Save for Later
 * Suggestions
 * Send reminders
 
@@ -65,7 +76,7 @@ in a [Docker installation](https://www.docker.com/).
 * Inventory
 * Suppliers
 * Shippers
-* Premotions
+* Promotions
 * Accounting
 * Security
 * Performance
