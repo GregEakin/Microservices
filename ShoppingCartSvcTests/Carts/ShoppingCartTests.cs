@@ -44,7 +44,7 @@ namespace ShoppingCartSvcTests.Carts
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 123.456m));
             var items = new[] { item };
 
-            // _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item }));
+            // _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item })).Returns(0uL);
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
 
             var cart = new ShoppingCart(234, new ShoppingCartItem[0]);
@@ -72,7 +72,7 @@ namespace ShoppingCartSvcTests.Carts
             var msg = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}},"
                       + "{\"productId\":\"2\",\"productName\":\"foo2\",\"productDescription\":\"bar\",\"price\":{}},"
                       + "{\"productId\":\"3\",\"productName\":\"foo3\",\"productDescription\":\"bar\",\"price\":{}}]";
-            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(msg, options);
 
             Assert.IsNotNull(products);
@@ -86,7 +86,7 @@ namespace ShoppingCartSvcTests.Carts
         public void Deserialize_ProductCatalogProductTest()
         {
             var msg = "{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}";
-            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
             Assert.IsNotNull(product);
@@ -101,7 +101,7 @@ namespace ShoppingCartSvcTests.Carts
         public void DeserializeShort_ProductCatalogProductTest()
         {
             var msg = "{\"productId\":\"0\"}";
-            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
             Assert.IsNotNull(product);

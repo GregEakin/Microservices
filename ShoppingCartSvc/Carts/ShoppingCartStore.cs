@@ -44,11 +44,11 @@ where ""ShoppingCart"".""UserId"" = @UserId";
                     //     shoppingCartItem?.ProductName, shoppingCartItem?.ProductDescription, 
                     //     money?.Amount, money?.Currency);
 
-                    shoppingCart ??= new ShoppingCart(id, new ShoppingCartItem[]{});
+                    shoppingCart ??= new ShoppingCart(id, new ShoppingCartItem[] { });
                     if (shoppingCartItem == null)
                         return shoppingCart;
-                    
-                    shoppingCart.AddItems(new[] {shoppingCartItem}, null);
+
+                    shoppingCart.AddItems(new[] { shoppingCartItem }, null);
 
                     if (money == null)
                     {
@@ -79,10 +79,8 @@ values
             await using var conn = new NpgsqlConnection(connectionString);
             await conn.OpenAsync();
             await using var tx = await conn.BeginTransactionAsync();
-            await conn.ExecuteAsync(
-                deleteAllForShoppingCartSql,
-                new { Id = shoppingCart.Id },
-                tx).ConfigureAwait(false);
+            await conn.ExecuteAsync(deleteAllForShoppingCartSql, new { shoppingCart.Id }, tx)
+                .ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
             {
@@ -101,11 +99,9 @@ values
                 item.Price.Currency
             });
 
-            await conn.ExecuteAsync(
-                addAllForShoppingCartSql,
-                items,
-                tx).ConfigureAwait(false);
-            
+            await conn.ExecuteAsync(addAllForShoppingCartSql, items, tx)
+                .ConfigureAwait(false);
+
             await tx.CommitAsync();
         }
     }

@@ -45,12 +45,15 @@ namespace ShoppingCartSvc.Catalog
         }
 
         public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems(int[] productCatalogIds) =>
-            // exponentialRetryPolicy.ExecuteAsync(async () => await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false));
-            await GetItemsFromCatalogService(productCatalogIds).ConfigureAwait(false);
+            // exponentialRetryPolicy.ExecuteAsync(async () => await GetItemsFromCatalogService(productCatalogIds)
+            //                                                     .ConfigureAwait(false));
+            await GetItemsFromCatalogService(productCatalogIds)
+                .ConfigureAwait(false);
 
         public async Task<IEnumerable<ShoppingCartItem>> GetItemsFromCatalogService(int[] productCatalogIds)
         {
-            var payload = await RequestProductFromProductCatalog(productCatalogIds).ConfigureAwait(false);
+            var payload = await RequestProductFromProductCatalog(productCatalogIds)
+                .ConfigureAwait(false);
             return ConvertToShoppingCartItems(payload);
         }
 
@@ -84,10 +87,12 @@ namespace ShoppingCartSvc.Catalog
         private async Task<string> SendRequest(string requestUri)
         {
             using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
-            var response = await httpClient.GetAsync(requestUri).ConfigureAwait(false);
+            var response = await httpClient.GetAsync(requestUri)
+                .ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var maxAge = response.Headers.CacheControl?.MaxAge;
-            var payload = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var payload = await response.Content.ReadAsStringAsync()
+                .ConfigureAwait(false);
             AddToCache(requestUri, maxAge, payload);
             return payload;
         }

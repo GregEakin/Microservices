@@ -58,7 +58,8 @@ namespace ShoppingCartSvc.Carts
                 return BadRequest();
 
             var shoppingCart = await _shoppingCartStore.Get(userId);
-            var shoppingCartItems = await _productCatalog.GetShoppingCartItems(productCatalogIds).ConfigureAwait(false);
+            var shoppingCartItems = await _productCatalog.GetShoppingCartItems(productCatalogIds)
+                .ConfigureAwait(false);
             shoppingCart.AddItems(shoppingCartItems, _eventStore);
             await _shoppingCartStore.Save(shoppingCart);
             return Ok();

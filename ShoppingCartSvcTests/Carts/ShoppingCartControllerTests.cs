@@ -55,11 +55,8 @@ namespace ShoppingCartSvcTests.Carts
             // request.Setup(x => x.Scheme).Returns("http");
             // request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
             // request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
-
             var httpContext = Mock.Of<HttpContext>(_ => _.Request == request.Object);
-
-            var controllerContext = new ControllerContext() { HttpContext = httpContext };
-
+            var controllerContext = new ControllerContext { HttpContext = httpContext };
             var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
@@ -74,11 +71,10 @@ namespace ShoppingCartSvcTests.Carts
         {
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 4532.15m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
-
-            //_eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { Id = 124, item }));
-            _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
-
             _productCatalog.Setup(t => t.GetShoppingCartItems(new[] { 12 })).Returns(items);
+
+            //_eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { Id = 124, item })).Returns(0uL);
+            _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
 
             var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
             _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
@@ -88,11 +84,8 @@ namespace ShoppingCartSvcTests.Carts
             // request.Setup(x => x.Scheme).Returns("http");
             // request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
             // request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
-
             var httpContext = Mock.Of<HttpContext>(_ => _.Request == request.Object);
-
-            var controllerContext = new ControllerContext() { HttpContext = httpContext };
-
+            var controllerContext = new ControllerContext { HttpContext = httpContext };
             var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
@@ -105,13 +98,11 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public async Task DeleteCartItemTest()
         {
-            //_eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", new { Id = 124, item = 12}));
+            //_eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", new { Id = 124, item = 12})).Returns(0uL);
             _eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>())).Returns(0uL);
 
-            ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987.12m));
-            var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
-
-            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
+            var item = new ShoppingCartItem(12, "ProductName", "Description", new Money("USD", 987.12m));
+            var shoppingCart = new ShoppingCart(124, new[] { item });
             _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
             _shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>())).Returns(Task.CompletedTask);
 
@@ -119,11 +110,8 @@ namespace ShoppingCartSvcTests.Carts
             // request.Setup(x => x.Scheme).Returns("http");
             // request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
             // request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
-
             var httpContext = Mock.Of<HttpContext>(_ => _.Request == request.Object);
-
-            var controllerContext = new ControllerContext() { HttpContext = httpContext };
-
+            var controllerContext = new ControllerContext { HttpContext = httpContext };
             var controller = new ShoppingCartController(_logger.Object, _shoppingCartStore.Object, _productCatalog.Object, _eventStore.Object)
             {
                 ControllerContext = controllerContext,
