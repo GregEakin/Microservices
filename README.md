@@ -24,7 +24,7 @@ inside a [Docker](https://www.docker.com/) container.
 	1. Use the **Alternative Install Options**
 	1. `sudo apt install python3-pip`
 	1. `pip3 install docker-compose`
-	1. `export PATH="$HOME/.local/bin:$PATH"`
+	1. `export PATH="$PATH:$HOME/.local/bin"`
 1. Clone the repository
 	1. `sudo apt install git`
 	1. `git clone https://github.com/GregEakin/Microservices.git`
