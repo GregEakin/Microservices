@@ -6,13 +6,14 @@ Running on a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-
 with a [64-bit operating system](https://ubuntu.com/download/raspberry-pi) 
 in a [Docker installation](https://www.docker.com/).
 
-## How to build a micro services swarm
+## How to run the micro services swarm
 1. Start with a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
 1. Install a [64-bit operating system](https://ubuntu.com/download/raspberry-pi)
 1. Install [Docker](https://docs.docker.com/engine/install/ubuntu/)
-	1. Select *arm64* in step three
+	1. Select **arm64** in step three
 1. Install [Docker-Compose](https://docs.docker.com/compose/install/)
-	1. Use the Alternative Install Options
+	1. Use the **Alternative Install Options**
+	1. `sudo apt install python3-pip`
 	1. `pip3 install docker-compose`
 1. Clone the repository
 	1. `git clone https://github.com/GregEakin/Microservices.git`
@@ -20,10 +21,15 @@ in a [Docker installation](https://www.docker.com/).
 1. `docker-compose build`
 1. `docker-compose up -d`
 1. `docker-compose ps`
-1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
-1. ProductCatalogSvc: http://host:8086/swagger/index.html
-1. ShoppingCartSvc: http://host:8087/swagger/index.html
-1. Database: [PostgreSQL](https://www.postgresql.org/) host, port: 5432, user: cartapp, pass: cartpw
+1. Database: [PostgreSQL](https://www.postgresql.org/) host: rpi, port: 5432, user: cartapp, pass: cartpw
+	1. [Manually add](https://www.jetbrains.com/datagrip/) UserIds to Shopping Cart table
+1. Review the API: [Postman](https://www.postman.com/)
+	1. ProductCatalogSvc: *http://rpi:8086/swagger/index.html*
+		1. `GET http://rpi:8086/api/Products/products?id=0&id=19`
+	1. ShoppingCartSvc: *http://rpi:8087/swagger/index.html*
+		1. `POST http://rpi:8087/api/ShoppingCart/14/items  [0,19]`
+		1. `GET http://rpi:8087/api/ShoppingCart/14`
+		1. `DELETE http://rpi:8087/api/ShoppingCart/14/items  [0,19]`
 1. `docker-compose down --volumes`
 1. `docker-compose push`
 
@@ -43,8 +49,8 @@ in a [Docker installation](https://www.docker.com/).
 * Returns dummy information
 * Unit Tests
 
-## Additional Shopping Cart Features
-* Get product prices
+## Additional Shopping Cart Features Needed
+* Product Copy and Pitctures
 * Inventory Events
 * Customers
 * Reservations
@@ -53,7 +59,7 @@ in a [Docker installation](https://www.docker.com/).
 * Suggestions
 * Send reminders
 
-## Additional Services
+## Additional Services Needed
 * Event Logging
 * Customers
 * Inventory
