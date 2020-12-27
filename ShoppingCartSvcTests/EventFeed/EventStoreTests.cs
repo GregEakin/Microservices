@@ -15,10 +15,9 @@
 // FILE:  EventStoreTests.cs
 // AUTHOR:  Greg Eakin
 
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using ShoppingCartSvc.EventFeed;
+using System.Linq;
 
 namespace ShoppingCartSvcTests.EventFeed
 {

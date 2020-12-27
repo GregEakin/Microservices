@@ -19,5 +19,5 @@ using System;
 
 namespace ShoppingCartSvc.EventFeed
 {
-    public record Event(long SequenceNumber, DateTime OccurredAt, string Name, object Content);
+    public record Event(ulong SequenceNumber, DateTime OccurredAt, string Name, object Content);
 }

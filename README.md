@@ -36,10 +36,12 @@ in a [Docker installation](https://www.docker.com/).
 * Ask Product Catalog for information
 * Caching Product Catalog information
 * Generate event notifications
+* Unit Tests
 
 ## Current Product Features
 * [REST ASP.NET](https://dotnet.microsoft.com/apps/aspnet) interface
 * Returns dummy information
+* Unit Tests
 
 ## Additional Shopping Cart Features
 * Get product prices

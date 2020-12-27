@@ -21,7 +21,7 @@ namespace ShoppingCartSvc.EventFeed
 {
     public interface IEventStore
     {
-        IEnumerable<Event> GetEvents(long firstEventSequenceNumber, long lastEventSequenceNumber);
-        long Raise(string eventName, object content);
+        IEnumerable<Event> GetEvents(ulong firstEventSequenceNumber, ulong lastEventSequenceNumber);
+        ulong Raise(string eventName, object content);
     }
 }

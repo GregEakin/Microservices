@@ -76,7 +76,7 @@ namespace ShoppingCartSvcTests.Carts
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });
 
             //_eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { Id = 124, item }));
-            _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0L);
+            _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
 
             _productCatalog.Setup(t => t.GetShoppingCartItems(new[] { 12 })).Returns(items);
 
@@ -106,7 +106,7 @@ namespace ShoppingCartSvcTests.Carts
         public async Task DeleteCartItemTest()
         {
             //_eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", new { Id = 124, item = 12}));
-            _eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>())).Returns(0L);
+            _eventStore.Setup(t => t.Raise("ShoppingCartItemRemoved", It.IsAny<object>())).Returns(0uL);
 
             ShoppingCartItem item = new(12, "ProductName", "Description", new Money("Currency", 987.12m));
             var items = Task.FromResult((IEnumerable<ShoppingCartItem>)new[] { item });

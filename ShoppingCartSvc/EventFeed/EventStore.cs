@@ -24,21 +24,21 @@ namespace ShoppingCartSvc.EventFeed
 {
     public class EventStore : IEventStore
     {
-        private static long _currentSequenceNumber = 0;
-        private static readonly IList<Event> Database = new List<Event>();
+        private static ulong _currentSequenceNumber = 0uL;
+        private readonly IList<Event> _database = new List<Event>();
 
-        public IEnumerable<Event> GetEvents(long firstEventSequenceNumber, long lastEventSequenceNumber)
-            => Database
+        public IEnumerable<Event> GetEvents(ulong firstEventSequenceNumber, ulong lastEventSequenceNumber)
+            => _database
                 .Where(e =>
                     e.SequenceNumber >= firstEventSequenceNumber &&
                     e.SequenceNumber <= lastEventSequenceNumber)
                 .OrderBy(e => e.SequenceNumber);
 
-        public long Raise(string eventName, object content)
+        public ulong Raise(string eventName, object content)
         {
             var seqNumber = Interlocked.Increment(ref _currentSequenceNumber);
             var @event = new Event(seqNumber, DateTime.UtcNow, eventName, content);
-            Database.Add(@event);
+            _database.Add(@event);
             return seqNumber;
         }
     }
