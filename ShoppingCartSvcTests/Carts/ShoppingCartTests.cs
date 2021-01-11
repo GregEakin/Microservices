@@ -20,6 +20,7 @@ using NUnit.Framework;
 using ShoppingCartSvc.Carts;
 using ShoppingCartSvc.Catalog;
 using ShoppingCartSvc.EventFeed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -47,7 +48,7 @@ namespace ShoppingCartSvcTests.Carts
             // _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { UserId = 234, item = item })).Returns(0uL);
             _mockEventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
 
-            var cart = new ShoppingCart(234, new ShoppingCartItem[0]);
+            var cart = new ShoppingCart(234, Array.Empty<ShoppingCartItem>());
             cart.AddItems(items, _mockEventStore.Object);
 
             Assert.AreEqual(items, cart.Items);

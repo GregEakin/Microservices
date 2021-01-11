@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace ShoppingCartSvc.Carts
 {
-    public class ShoppingCartClient
+    public sealed class ShoppingCartClient : IDisposable
     {
         private readonly HttpClient _client = new();
 
@@ -82,7 +82,7 @@ namespace ShoppingCartSvc.Carts
             try
             {
                 // Create a new product
-                var shoppingCart = new ShoppingCart(42, new ShoppingCartItem[0]);
+                var shoppingCart = new ShoppingCart(42, Array.Empty<ShoppingCartItem>());
 
                 var url = await CreateShoppingCartAsync(shoppingCart);
                 Console.WriteLine($"Created at {url}");
@@ -110,6 +110,11 @@ namespace ShoppingCartSvc.Carts
             }
 
             Console.ReadLine();
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
         }
     }
 }

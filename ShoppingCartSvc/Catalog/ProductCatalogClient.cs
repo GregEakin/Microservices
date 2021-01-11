@@ -34,8 +34,8 @@ namespace ShoppingCartSvc.Catalog
         //       attempt => TimeSpan.FromMilliseconds(100 * Math.Pow(2, attempt)), (ex, _) => Console.WriteLine(ex.ToString()));
 
         // http://microservices_productsvc_1/api/Products/items?id=2&id=3
-        private const string productCatalogBaseUrl = @"http://microservices_productsvc_1/api/";
-        private const string getProductPathTemplate = "Products/products?id={0}";
+        private const string ProductCatalogBaseUrl = @"http://microservices_productsvc_1/api/";
+        private const string GetProductPathTemplate = "Products/products?id={0}";
 
         private readonly ICache _cache;
 
@@ -59,7 +59,7 @@ namespace ShoppingCartSvc.Catalog
 
         public async Task<string> RequestProductFromProductCatalog(IEnumerable<int> productCatalogIds)
         {
-            var requestUri = string.Format(getProductPathTemplate, string.Join("&id=", productCatalogIds));
+            var requestUri = string.Format(GetProductPathTemplate, string.Join("&id=", productCatalogIds));
             var payload = _cache.Get(requestUri);
             if (!string.IsNullOrEmpty(payload))
                 return payload;
@@ -86,7 +86,7 @@ namespace ShoppingCartSvc.Catalog
 
         private async Task<string> SendRequest(string requestUri)
         {
-            using var httpClient = new HttpClient { BaseAddress = new Uri(productCatalogBaseUrl) };
+            using var httpClient = new HttpClient { BaseAddress = new Uri(ProductCatalogBaseUrl) };
             var response = await httpClient.GetAsync(requestUri)
                 .ConfigureAwait(false);
             response.EnsureSuccessStatusCode();

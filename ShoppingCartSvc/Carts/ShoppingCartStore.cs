@@ -15,6 +15,7 @@
 // FILE:  ShoppingCartStore.cs
 // AUTHOR:  Greg Eakin
 
+using System;
 using Dapper;
 using Npgsql;
 using System.Linq;
@@ -24,27 +25,27 @@ namespace ShoppingCartSvc.Carts
 {
     public class ShoppingCartStore : IShoppingCartStore
     {
-        private const string connectionString =
+        private const string ConnectionString =
             @"Host=microservices_cartdb_1;Port=5432;Database=cartapp;Username=cartapp;Password=cartpw";
 
-        private const string readItemsSql =
+        private const string ReadItemsSql =
             @"select ""ShoppingCart"".id, ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Currency"", ""Amount""
 from ""ShoppingCart"" left join ""ShoppingCartItems"" on ""ShoppingCart"".""id"" = ""ShoppingCartItems"".""ShoppingCartId""
 where ""ShoppingCart"".""UserId"" = @UserId";
 
         public async Task<ShoppingCart> Get(int userId)
         {
-            await using var conn = new NpgsqlConnection(connectionString);
+            await using var conn = new NpgsqlConnection(ConnectionString);
             await conn.OpenAsync();
             ShoppingCart shoppingCart = null;
-            var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCart>(readItemsSql,
+            var items = await conn.QueryAsync<int, ShoppingCartItem, Money, ShoppingCart>(ReadItemsSql,
                 (id, shoppingCartItem, money) =>
                 {
                     // Console.WriteLine("Read DB: {0}, {1}, {2}, {3}, {4}, {5}", id, shoppingCartItem?.ProductCatalogId,
                     //     shoppingCartItem?.ProductName, shoppingCartItem?.ProductDescription, 
                     //     money?.Amount, money?.Currency);
 
-                    shoppingCart ??= new ShoppingCart(id, new ShoppingCartItem[] { });
+                    shoppingCart ??= new ShoppingCart(id, Array.Empty<ShoppingCartItem>());
                     if (shoppingCartItem == null)
                         return shoppingCart;
 
@@ -67,19 +68,19 @@ where ""ShoppingCart"".""UserId"" = @UserId";
             return items.FirstOrDefault();
         }
 
-        private const string deleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" WHERE ""ShoppingCartId"" = @Id";
+        private const string DeleteAllForShoppingCartSql = @"DELETE FROM ""ShoppingCartItems"" WHERE ""ShoppingCartId"" = @Id";
 
-        private const string addAllForShoppingCartSql =
+        private const string AddAllForShoppingCartSql =
             @"insert into ""ShoppingCartItems"" (""ShoppingCartId"", ""ProductCatalogId"", ""ProductName"", ""ProductDescription"", ""Amount"", ""Currency"")
 values 
 (@ShoppingCartId, @ProductCatalogId, @ProductName, @ProductDescription, @Amount, @Currency)";
 
         public async Task Save(ShoppingCart shoppingCart)
         {
-            await using var conn = new NpgsqlConnection(connectionString);
+            await using var conn = new NpgsqlConnection(ConnectionString);
             await conn.OpenAsync();
             await using var tx = await conn.BeginTransactionAsync();
-            await conn.ExecuteAsync(deleteAllForShoppingCartSql, new { shoppingCart.Id }, tx)
+            await conn.ExecuteAsync(DeleteAllForShoppingCartSql, new { shoppingCart.Id }, tx)
                 .ConfigureAwait(false);
 
             foreach (var item in shoppingCart.Items)
@@ -99,7 +100,7 @@ values
                 item.Price.Currency
             });
 
-            await conn.ExecuteAsync(addAllForShoppingCartSql, items, tx)
+            await conn.ExecuteAsync(AddAllForShoppingCartSql, items, tx)
                 .ConfigureAwait(false);
 
             await tx.CommitAsync();

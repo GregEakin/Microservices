@@ -15,9 +15,9 @@
 // FILE:  UnitTest1.cs
 // AUTHOR:  Greg Eakin
 
-using System.Linq;
 using NUnit.Framework;
 using ProductCatalogSvc.Products;
+using System.Linq;
 
 namespace ProductCatalogSvcTests.Products
 {

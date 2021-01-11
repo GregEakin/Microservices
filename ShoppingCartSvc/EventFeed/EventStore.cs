@@ -24,7 +24,7 @@ namespace ShoppingCartSvc.EventFeed
 {
     public class EventStore : IEventStore
     {
-        private static ulong _currentSequenceNumber = 0uL;
+        private static ulong _currentSequenceNumber;
         private readonly IList<Event> _database = new List<Event>();
 
         public IEnumerable<Event> GetEvents(ulong firstEventSequenceNumber, ulong lastEventSequenceNumber)

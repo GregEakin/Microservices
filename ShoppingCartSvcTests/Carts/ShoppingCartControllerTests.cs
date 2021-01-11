@@ -23,6 +23,7 @@ using NUnit.Framework;
 using ShoppingCartSvc.Carts;
 using ShoppingCartSvc.Catalog;
 using ShoppingCartSvc.EventFeed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace ShoppingCartSvcTests.Carts
         [Test]
         public async Task GetCartTest()
         {
-            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
+            var shoppingCart = new ShoppingCart(124, Array.Empty<ShoppingCartItem>());
             _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
 
             var request = new Mock<HttpRequest>();
@@ -76,7 +77,7 @@ namespace ShoppingCartSvcTests.Carts
             //_eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", new { Id = 124, item })).Returns(0uL);
             _eventStore.Setup(t => t.Raise("ShoppingCartItemAdded", It.IsAny<object>())).Returns(0uL);
 
-            var shoppingCart = new ShoppingCart(124, new ShoppingCartItem[0]);
+            var shoppingCart = new ShoppingCart(124, Array.Empty<ShoppingCartItem>());
             _shoppingCartStore.Setup(t => t.Get(124)).Returns(Task.FromResult(shoppingCart));
             _shoppingCartStore.Setup(t => t.Save(It.IsAny<ShoppingCart>())).Returns(Task.CompletedTask);
 
