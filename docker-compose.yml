@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 
 services:
   productsvc:
@@ -12,7 +12,7 @@ services:
     networks:
       - bus
   cartdb:
-    image: postgres:13
+    image: postgres:latest
     environment:
       POSTGRES_USER: "cartapp"
       POSTGRES_PASSWORD: "cartpw"
