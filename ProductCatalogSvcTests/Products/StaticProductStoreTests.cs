@@ -18,6 +18,7 @@
 using NUnit.Framework;
 using ProductCatalogSvc.Products;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace ProductCatalogSvcTests.Products
 {
@@ -28,10 +29,10 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var product = store.GetProductsByIds(new[] { 0 }).Single();
-            Assert.AreEqual("0", product.ProductId);
-            Assert.IsNotNull(product.ProductName);
-            Assert.IsNotNull(product.ProductDescription);
-            Assert.IsNotNull(product.Price);
+            ClassicAssert.AreEqual("0", product.ProductId);
+            ClassicAssert.IsNotNull(product.ProductName);
+            ClassicAssert.IsNotNull(product.ProductDescription);
+            ClassicAssert.IsNotNull(product.Price);
         }
 
         [Test]
@@ -39,10 +40,10 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { 2, 6, 9 }).ToArray();
-            Assert.AreEqual(3, products.Length);
-            Assert.AreEqual("2", products[0].ProductId);
-            Assert.AreEqual("6", products[1].ProductId);
-            Assert.AreEqual("9", products[2].ProductId);
+            ClassicAssert.AreEqual(3, products.Length);
+            ClassicAssert.AreEqual("2", products[0].ProductId);
+            ClassicAssert.AreEqual("6", products[1].ProductId);
+            ClassicAssert.AreEqual("9", products[2].ProductId);
         }
 
         [Test]
@@ -50,7 +51,7 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { -1 });
-            Assert.IsFalse(products.Any());
+            ClassicAssert.IsFalse(products.Any());
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { 200 });
-            Assert.IsFalse(products.Any());
+            ClassicAssert.IsFalse(products.Any());
         }
     }
 }

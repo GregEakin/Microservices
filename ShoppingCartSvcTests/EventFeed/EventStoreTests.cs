@@ -18,6 +18,7 @@
 using NUnit.Framework;
 using ShoppingCartSvc.EventFeed;
 using System.Linq;
+using NUnit.Framework.Legacy;
 
 namespace ShoppingCartSvcTests.EventFeed
 {
@@ -32,9 +33,9 @@ namespace ShoppingCartSvcTests.EventFeed
             var event3 = eventStore.Raise("Event3", null);
 
             var events = eventStore.GetEvents(event2, event2).ToArray();
-            Assert.AreEqual(1, events.Length);
-            Assert.AreEqual(event2, events[0].SequenceNumber);
-            Assert.AreEqual("Event2", events[0].Name);
+            ClassicAssert.AreEqual(1, events.Length);
+            ClassicAssert.AreEqual(event2, events[0].SequenceNumber);
+            ClassicAssert.AreEqual("Event2", events[0].Name);
         }
     }
 }
