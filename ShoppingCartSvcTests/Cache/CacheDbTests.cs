@@ -17,7 +17,6 @@
 
 using System;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using ShoppingCartSvc.Cache;
 
 namespace ShoppingCartSvcTests.Cache
@@ -29,7 +28,7 @@ namespace ShoppingCartSvcTests.Cache
         {
             var cache = new CacheDb();
             var value = cache.Get("key");
-            ClassicAssert.IsNull(value);
+            Assert.That(value, Is.Null);
         }
 
         [Test]
@@ -40,7 +39,7 @@ namespace ShoppingCartSvcTests.Cache
             cache.Add("key", twoHoursAgo, "value");
 
             var value = cache.Get("key");
-            ClassicAssert.IsNull(value);
+            Assert.That(value, Is.Null);
         }
 
         [Test]
@@ -51,7 +50,7 @@ namespace ShoppingCartSvcTests.Cache
             cache.Add("key", fewMinutesAgo, "value");
 
             var value = cache.Get("key");
-            ClassicAssert.AreEqual("value", value);
+            Assert.That("value", Is.EqualTo(value));
         }
     }
 }

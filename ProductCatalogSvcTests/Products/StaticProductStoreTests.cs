@@ -18,7 +18,6 @@
 using NUnit.Framework;
 using ProductCatalogSvc.Products;
 using System.Linq;
-using NUnit.Framework.Legacy;
 
 namespace ProductCatalogSvcTests.Products
 {
@@ -29,10 +28,10 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var product = store.GetProductsByIds(new[] { 0 }).Single();
-            ClassicAssert.AreEqual("0", product.ProductId);
-            ClassicAssert.IsNotNull(product.ProductName);
-            ClassicAssert.IsNotNull(product.ProductDescription);
-            ClassicAssert.IsNotNull(product.Price);
+            Assert.That("0", Is.EqualTo(product.ProductId));
+            Assert.That(product.ProductName, Is.Not.Null);
+            Assert.That(product.ProductDescription, Is.Not.Null);
+            Assert.That(product.Price, Is.Not.Null);
         }
 
         [Test]
@@ -40,10 +39,10 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { 2, 6, 9 }).ToArray();
-            ClassicAssert.AreEqual(3, products.Length);
-            ClassicAssert.AreEqual("2", products[0].ProductId);
-            ClassicAssert.AreEqual("6", products[1].ProductId);
-            ClassicAssert.AreEqual("9", products[2].ProductId);
+            Assert.That(3, Is.EqualTo(products.Length));
+            Assert.That("2", Is.EqualTo(products[0].ProductId));
+            Assert.That("6", Is.EqualTo(products[1].ProductId));
+            Assert.That("9", Is.EqualTo(products[2].ProductId));
         }
 
         [Test]
@@ -51,7 +50,7 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { -1 });
-            ClassicAssert.IsFalse(products.Any());
+            Assert.That(products.Any(), Is.False);
         }
 
         [Test]
@@ -59,7 +58,7 @@ namespace ProductCatalogSvcTests.Products
         {
             var store = new StaticProductStore();
             var products = store.GetProductsByIds(new[] { 200 });
-            ClassicAssert.IsFalse(products.Any());
+            Assert.That(products.Any(), Is.False);
         }
     }
 }

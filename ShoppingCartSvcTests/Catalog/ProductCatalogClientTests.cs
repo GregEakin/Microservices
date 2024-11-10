@@ -24,7 +24,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using NUnit.Framework.Legacy;
 
 namespace ShoppingCartSvcTests.Catalog
 {
@@ -47,11 +46,11 @@ namespace ShoppingCartSvcTests.Catalog
             var client = new ProductCatalogClient(_mockCache.Object);
             var response = await client.GetItemsFromCatalogService(new[] { 0 });
             var product = response.Single();
-            ClassicAssert.AreEqual(0, product.ProductCatalogId);
-            ClassicAssert.AreEqual("foo0", product.ProductName);
-            ClassicAssert.AreEqual("bar", product.ProductDescription);
-            ClassicAssert.IsNotNull(product.Price);
-            ClassicAssert.IsFalse(string.IsNullOrEmpty(product.Price.Currency));
+            Assert.That(0, Is.EqualTo(product.ProductCatalogId));
+            Assert.That("foo0", Is.EqualTo(product.ProductName));
+            Assert.That("bar", Is.EqualTo(product.ProductDescription));
+            Assert.That(product.Price, Is.Not.Null);
+            Assert.That(string.IsNullOrEmpty(product.Price.Currency), Is.False);
         }
 
         [Test]
@@ -62,7 +61,7 @@ namespace ShoppingCartSvcTests.Catalog
 
             var client = new ProductCatalogClient(_mockCache.Object);
             var response = await client.RequestProductFromProductCatalog(new[] { 0 });
-            ClassicAssert.AreEqual(cachedResponse, response);
+            Assert.That(cachedResponse, Is.EqualTo(response));
         }
 
         // [Test]
@@ -70,7 +69,7 @@ namespace ShoppingCartSvcTests.Catalog
         // {
         //     var client = new ProductCatalogClient(null);
         //     using var response = new HttpResponseMessage(HttpStatusCode.NotFound);
-        //     ClassicAssert.ThrowsAsync<HttpRequestException>(async () => await client.ConvertToShoppingCartItems(response));
+        //     Assert.ThrowsAsync<HttpRequestException>(async () => await client.ConvertToShoppingCartItems(response));
         // }
 
         [Test]
@@ -78,7 +77,7 @@ namespace ShoppingCartSvcTests.Catalog
         {
             var client = new ProductCatalogClient(null);
             var result = client.ConvertToShoppingCartItems("[]");
-            ClassicAssert.IsFalse(result.Any());
+            Assert.That(result.Any(), Is.False);
         }
 
         [Test]
@@ -88,11 +87,11 @@ namespace ShoppingCartSvcTests.Catalog
             var response = "[{\"productId\":\"0\",\"productName\":\"foo0\",\"productDescription\":\"bar\",\"price\":{}}]";
             var result = client.ConvertToShoppingCartItems(response);
             var product = result.Single();
-            ClassicAssert.AreEqual(0, product.ProductCatalogId);
-            ClassicAssert.AreEqual("foo0", product.ProductName);
-            ClassicAssert.AreEqual("bar", product.ProductDescription);
-            ClassicAssert.IsNotNull(product.Price);
-            ClassicAssert.IsFalse(string.IsNullOrEmpty(product.Price.Currency));
+            Assert.That(0, Is.EqualTo(product.ProductCatalogId));
+            Assert.That("foo0", Is.EqualTo(product.ProductName));
+            Assert.That("bar", Is.EqualTo(product.ProductDescription));
+            Assert.That(product.Price, Is.Not.Null);
+            Assert.That(string.IsNullOrEmpty(product.Price.Currency), Is.False);
         }
 
         [Test]

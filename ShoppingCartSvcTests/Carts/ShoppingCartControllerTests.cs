@@ -27,7 +27,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NUnit.Framework.Legacy;
 
 namespace ShoppingCartSvcTests.Carts
 {
@@ -65,7 +64,7 @@ namespace ShoppingCartSvcTests.Carts
             };
 
             var result = await controller.Get(124);
-            ClassicAssert.AreSame(shoppingCart, result.Value);
+            Assert.That(shoppingCart, Is.SameAs(result.Value));
         }
 
         [Test]
@@ -94,7 +93,7 @@ namespace ShoppingCartSvcTests.Carts
             };
 
             var response = await controller.Post(124, new[] { 12 });
-            ClassicAssert.AreEqual(200, (response as StatusCodeResult)?.StatusCode);
+            Assert.That(200, Is.EqualTo((response as StatusCodeResult)?.StatusCode));
         }
 
         [Test]
@@ -120,7 +119,7 @@ namespace ShoppingCartSvcTests.Carts
             };
 
             await controller.Delete(124, new[] { 12 });
-            ClassicAssert.IsFalse(shoppingCart.Items.Any());
+            Assert.That(shoppingCart.Items.Any(), Is.False);
         }
     }
 }

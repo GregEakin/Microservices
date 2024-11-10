@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using NUnit.Framework.Legacy;
 
 namespace ShoppingCartSvcTests.Carts
 {
@@ -52,7 +51,7 @@ namespace ShoppingCartSvcTests.Carts
             var cart = new ShoppingCart(234, Array.Empty<ShoppingCartItem>());
             cart.AddItems(items, _mockEventStore.Object);
 
-            ClassicAssert.AreEqual(items, cart.Items);
+            Assert.That(items, Is.EqualTo(cart.Items));
         }
 
         [Test]
@@ -65,7 +64,7 @@ namespace ShoppingCartSvcTests.Carts
 
             cart.RemoveItems(new[] { 12 }, _mockEventStore.Object);
 
-            ClassicAssert.IsFalse(cart.Items.Any());
+            Assert.That(cart.Items.Any(), Is.False);
         }
 
         [Test]
@@ -77,11 +76,11 @@ namespace ShoppingCartSvcTests.Carts
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var products = JsonSerializer.Deserialize<List<ProductCatalogProduct>>(msg, options);
 
-            ClassicAssert.IsNotNull(products);
-            ClassicAssert.AreEqual(3, products.Count);
-            ClassicAssert.AreEqual("0", products[0].ProductId);
-            ClassicAssert.AreEqual("2", products[1].ProductId);
-            ClassicAssert.AreEqual("3", products[2].ProductId);
+            Assert.That(products, Is.Not.Null);
+            Assert.That(3, Is.EqualTo(products.Count));
+            Assert.That("0", Is.EqualTo(products[0].ProductId));
+            Assert.That("2", Is.EqualTo(products[1].ProductId));
+            Assert.That("3", Is.EqualTo(products[2].ProductId));
         }
 
         [Test]
@@ -91,12 +90,12 @@ namespace ShoppingCartSvcTests.Carts
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
-            ClassicAssert.IsNotNull(product);
-            ClassicAssert.AreEqual("0", product.ProductId);
-            ClassicAssert.AreEqual("foo0", product.ProductName);
-            ClassicAssert.AreEqual("bar", product.ProductDescription);
-            ClassicAssert.IsNotNull(product.Price);
-            ClassicAssert.IsTrue(string.IsNullOrEmpty(product.Price.Currency));
+            Assert.That(product, Is.Not.Null);
+            Assert.That("0", Is.EqualTo(product.ProductId));
+            Assert.That("foo0", Is.EqualTo(product.ProductName));
+            Assert.That("bar", Is.EqualTo(product.ProductDescription));
+            Assert.That(product.Price, Is.Not.Null);
+            Assert.That(string.IsNullOrEmpty(product.Price.Currency), Is.True);
         }
 
         [Test]
@@ -106,11 +105,11 @@ namespace ShoppingCartSvcTests.Carts
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var product = JsonSerializer.Deserialize<ProductCatalogProduct>(msg, options);
 
-            ClassicAssert.IsNotNull(product);
-            ClassicAssert.AreEqual("0", product.ProductId);
-            ClassicAssert.IsTrue(string.IsNullOrEmpty(product.ProductName));
-            ClassicAssert.IsTrue(string.IsNullOrEmpty(product.ProductDescription));
-            ClassicAssert.IsNull(product.Price);
+            Assert.That(product, Is.Not.Null);
+            Assert.That("0", Is.EqualTo(product.ProductId));
+            Assert.That(string.IsNullOrEmpty(product.ProductName), Is.True);
+            Assert.That(string.IsNullOrEmpty(product.ProductDescription), Is.True);
+            Assert.That(product.Price, Is.Null);
         }
     }
 }
